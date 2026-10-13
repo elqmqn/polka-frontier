@@ -1,10 +1,10 @@
 <!doctype html>
 <html lang="ru">
-<!-- Polka Frontier v0.7: browser-only game; game items are fictional local data, not crypto assets. -->
+<!-- Polka Frontier v0.8: community toolkit; browser-only game; fictional local resources, not crypto assets. -->
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Polka Frontier — Prototype v0.7</title>
+<title>Polka Frontier — Prototype v0.8</title>
 <style>
   :root{--bg:#090d18;--panel:#11182a;--panel2:#151f35;--line:#24324e;--text:#edf3ff;--muted:#8d9bb7;--cyan:#5de7dc;--violet:#a78bfa;--gold:#f8c76a;--green:#89f0a5;--red:#ff8799}
   *{box-sizing:border-box} html{background:var(--bg)} body{margin:0;color:var(--text);font:15px/1.45 Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:radial-gradient(ellipse at 75% -10%,#182e54 0%,transparent 45%),radial-gradient(ellipse at 0% 45%,#171338 0%,transparent 36%),var(--bg);min-height:100vh}
@@ -49,14 +49,19 @@
   @media(max-width:850px){.research-grid{grid-template-columns:1fr}.research-card p{min-height:0}.expedition-grid{grid-template-columns:1fr}.expedition-location p{min-height:0}.expedition-control{grid-template-columns:1fr}.expedition-summary{grid-template-columns:repeat(2,minmax(0,1fr))}}
   @media(max-width:650px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.weekly-grid{grid-template-columns:1fr}.research-grid{padding:12px}.research-bottom{align-items:flex-start}.weekly-footer{align-items:stretch;flex-direction:column}}
 
+
+  .community-panel{margin-top:18px}.community-hero{padding:22px 22px 20px;background:radial-gradient(ellipse at 85% 5%,#29465a66,transparent 42%),linear-gradient(125deg,rgba(38,47,82,.78),rgba(15,23,39,.48));border-bottom:1px solid #202c45}.community-hero h2{font-size:clamp(20px,2.6vw,28px);line-height:1.15;letter-spacing:-.035em;margin:8px 0}.community-hero p{font-size:12px;color:#b2bfd5;line-height:1.7;max-width:790px;margin:0}.community-hero-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:17px}.community-button{display:inline-flex;justify-content:center;align-items:center;gap:7px;background:#1c2b43;border:1px solid #364b69;color:#d2def3;border-radius:9px;padding:10px 13px;font-size:11px;font-weight:850;text-decoration:none}.community-button.primary{background:linear-gradient(100deg,#5de7dc,#80f3d2);border:0;color:#071b27}.community-button.ghost{background:transparent}.community-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px;padding:15px}.community-card{min-width:0;border:1px solid #293753;background:rgba(13,20,35,.82);border-radius:13px;padding:16px}.community-card-title{display:flex;align-items:center;gap:9px;font-size:12px;font-weight:900;margin-bottom:8px}.community-card-icon{width:34px;height:34px;display:grid;place-items:center;background:#26334f;border-radius:10px;font-size:17px;flex:none}.community-copy{font-size:11px;line-height:1.6;color:#a6b5ce;margin:7px 0 12px}.community-action-row{display:flex;flex-wrap:wrap;gap:8px}.community-status{font-size:10px;line-height:1.5;color:#7fe7d8;min-height:15px;margin-top:9px}.community-steps{display:grid;gap:8px;margin-top:13px}.community-step{display:flex;align-items:center;gap:10px;padding:10px 11px;border:1px solid #26354f;background:#121c2f;border-radius:10px;min-width:0}.community-step-check{width:23px;height:23px;display:grid;place-items:center;border-radius:50%;border:1px solid #4b5a78;color:#8193b0;font-size:11px;flex:none}.community-step.done .community-step-check{background:#173e3a;border-color:#2e7d73;color:#8ef0dc}.community-step-body{flex:1;min-width:0}.community-step-name{font-size:11px;font-weight:800}.community-step-desc{font-size:10px;color:#8fa1be;margin-top:2px;line-height:1.45}.community-step-state{font-size:9px;font-weight:850;color:#778aa9;white-space:nowrap}.community-step.done .community-step-state{color:#8ef0dc}.community-progress{height:5px;background:#263149;border-radius:99px;overflow:hidden;margin-top:12px}.community-progress-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--violet),var(--cyan));border-radius:99px;transition:width .2s}.community-progress-label{display:flex;justify-content:space-between;gap:8px;font-size:10px;color:#8fa1be;margin-top:7px}.community-field{display:grid;gap:6px;margin:10px 0}.community-field label{font-size:10px;color:#9fadc7;font-weight:750}.community-field select,.community-field textarea{width:100%;min-width:0;color:#e5eefc;background:#101a2c;border:1px solid #344360;border-radius:8px;padding:10px;font:inherit;font-size:11px;outline:none}.community-field textarea{min-height:90px;resize:vertical;line-height:1.55}.community-field select:focus,.community-field textarea:focus{border-color:var(--cyan)}.community-roadmap{display:grid;gap:9px;margin-top:12px}.community-roadmap-row{display:grid;grid-template-columns:94px minmax(0,1fr);gap:10px;padding:10px 11px;border-radius:9px;background:#131e31;border:1px solid #273650}.community-roadmap-label{font-size:9px;letter-spacing:.1em;font-weight:900;color:#72e4d6}.community-roadmap-row.next .community-roadmap-label{color:#f3ca76}.community-roadmap-text{font-size:10px;line-height:1.55;color:#b0bfd7}.community-disclaimer{font-size:10px;line-height:1.65;color:#7e90ad;padding:0 16px 16px}.community-disclaimer strong{color:#aabbd4}
+  @media(max-width:850px){.community-grid{grid-template-columns:1fr}.community-roadmap-row{grid-template-columns:80px minmax(0,1fr)}}
+  @media(max-width:520px){.community-hero{padding:18px}.community-grid{padding:11px}.community-hero-actions .community-button{width:100%}.community-action-row .community-button{flex:1}}
+
 </style>
 </head>
 <body>
 <div class="app">
   <aside>
     <div class="brand"><div class="logo">P</div><div><div class="brand-name">POLKA FRONTIER</div><div class="brand-sub">WEB3 EXPLORATION</div></div></div>
-    <div class="nav-wrap"><div class="nav-label">КОМАНДНЫЙ ЦЕНТР</div><nav class="nav"><button class="active" data-nav="base"><span class="ico">◈</span>Моя база</button><button data-nav="fleet"><span class="ico">⛏</span>Добыча</button><button data-nav="research"><span class="ico">⌘</span>Исследования</button><button data-nav="missions"><span class="ico">✧</span>Задания</button><button data-nav="expeditions"><span class="ico">🛰</span>Экспедиции</button><button data-nav="profile"><span class="ico">◎</span>Профиль пилота</button><button data-nav="weekly"><span class="ico">▦</span>Контракты</button><button data-nav="expansion"><span class="ico">⌂</span>Развитие базы</button><button data-nav="sectors"><span class="ico">⌖</span>Карта секторов</button><button data-nav="polkadot"><span class="ico">●</span>О Polkadot</button></nav></div>
-    <div class="aside-bottom"><div class="status-card"><div class="status-top"><span><i class="dot"></i>СИСТЕМЫ В НОРМЕ</span><span>v0.7</span></div><div class="status-title">Аванпост «Искра»</div><div class="status-copy" id="sidebarSectorCopy">Сектор 07 · Неизведанный рубеж</div></div></div>
+    <div class="nav-wrap"><div class="nav-label">КОМАНДНЫЙ ЦЕНТР</div><nav class="nav"><button class="active" data-nav="base"><span class="ico">◈</span>Моя база</button><button data-nav="fleet"><span class="ico">⛏</span>Добыча</button><button data-nav="research"><span class="ico">⌘</span>Исследования</button><button data-nav="missions"><span class="ico">✧</span>Задания</button><button data-nav="expeditions"><span class="ico">🛰</span>Экспедиции</button><button data-nav="profile"><span class="ico">◎</span>Профиль пилота</button><button data-nav="weekly"><span class="ico">▦</span>Контракты</button><button data-nav="expansion"><span class="ico">⌂</span>Развитие базы</button><button data-nav="sectors"><span class="ico">⌖</span>Карта секторов</button><button data-nav="polkadot"><span class="ico">●</span>О Polkadot</button><button data-nav="community"><span class="ico">✦</span>Штаб сообщества</button></nav></div>
+    <div class="aside-bottom"><div class="status-card"><div class="status-top"><span><i class="dot"></i>СИСТЕМЫ В НОРМЕ</span><span>v0.8</span></div><div class="status-title">Аванпост «Искра»</div><div class="status-copy" id="sidebarSectorCopy">Сектор 07 · Неизведанный рубеж</div></div></div>
   </aside>
   <main>
     <header class="topbar"><div><div class="eyebrow" id="sectorEyebrow">СЕКТОР 07 / НЕИЗВЕДАННЫЙ РУБЕЖ</div><h1 class="page-title">Командный центр</h1></div><div class="top-right"><div class="network-pill"><b>●</b> DEMO MODE · БЕЗ ТРАНЗАКЦИЙ</div><button class="wallet" id="walletBtn" title="Необязательно. Подключение не отправляет игровых транзакций.">Подключить кошелёк ↗</button></div></header>
@@ -242,14 +247,74 @@
       <div class="local-disclaimer">Важно: добываемые здесь кристаллы и сплавы — игровые данные, а не DOT или другие токены. Прогресс хранится локально в браузере, пока не подключён к серверу или блокчейну. Кнопка подключения кошелька не отправляет игровые транзакции. Игра пока не связана с контрактом Polkadot. Никогда не вводи seed-фразу или приватный ключ на сайте игры.</div>
       <div class="daily-strip"><div class="daily-copy"><strong>📡 Ежедневный сигнал</strong><span id="dailySignalText">Забери небольшой внутриигровой бонус сегодня.</span></div><button class="learn-btn secondary" id="dailySignalBtn">Получить +5 💎</button></div>
     </section>
-    <div class="footer-note"><span>POLKA FRONTIER · ИГРОВОЙ ПРОТОТИП v0.7</span><span>Прогресс хранится в этом браузере · игровые ресурсы не являются токенами</span><button id="resetBtn" style="background:transparent;color:#72819b;text-decoration:underline;font-size:10px;padding:0">Сбросить прогресс</button></div>
+    <section class="panel community-panel" id="communityPanel" aria-labelledby="communityTitle">
+      <div class="community-hero">
+        <div class="eyebrow">ПОЛЕВОЙ ШТАБ · ВЕРСИЯ 0.8</div>
+        <h2 id="communityTitle">Знакомь новых исследователей с Polka Frontier</h2>
+        <p>Это бесплатный браузерный эксперимент об исследовании планет и развитии аванпоста, созданный с интересом к экосистеме Polkadot. Помоги проверить механику, предложи улучшения или поделись игрой с друзьями. Подписка, кошелёк и оплата не нужны.</p>
+        <div class="community-hero-actions">
+          <button class="community-button primary" id="communityCopyInviteBtn">↗ Скопировать приглашение</button>
+          <button class="community-button" id="communityCopyAnnouncementBtn">✦ Подготовить анонс для X / Discord</button>
+          <a class="community-button ghost" href="https://github.com/elqmqn/polka-frontier" target="_blank" rel="noopener noreferrer">⌘ Исходный код ↗</a>
+          <a class="community-button ghost" href="https://elqmqn.github.io/polka-frontier/" target="_blank" rel="noopener noreferrer">▶ Открыть опубликованную игру ↗</a>
+        </div>
+        <div class="community-status" id="communityActionStatus" aria-live="polite"></div>
+      </div>
+      <div class="community-grid">
+        <article class="community-card">
+          <div class="community-card-title"><span class="community-card-icon">🧭</span><span>Первый маршрут исследователя</span></div>
+          <p class="community-copy">Эти шаги помогают понять основной игровой цикл. Отметки основаны на сохранении только в этом браузере.</p>
+          <div class="community-steps">
+            <div class="community-step" id="communityStepMining"><span class="community-step-check">1</span><div class="community-step-body"><div class="community-step-name">Запусти добычу</div><div class="community-step-desc">Добудь хотя бы одну партию кристаллов.</div></div><span class="community-step-state" id="communityStepMiningState">Впереди</span></div>
+            <div class="community-step" id="communityStepExplore"><span class="community-step-check">2</span><div class="community-step-body"><div class="community-step-name">Отправь разведку</div><div class="community-step-desc">Найди ресурсы за пределами базы.</div></div><span class="community-step-state" id="communityStepExploreState">Впереди</span></div>
+            <div class="community-step" id="communityStepDot"><span class="community-step-check">3</span><div class="community-step-body"><div class="community-step-name">Познакомься с Polkadot</div><div class="community-step-desc">Открой официальный обзор и отметь учебный этап.</div></div><span class="community-step-state" id="communityStepDotState">Впереди</span></div>
+          </div>
+          <div class="community-progress"><div class="community-progress-fill" id="communityProgressFill"></div></div>
+          <div class="community-progress-label"><span>Маршрут сообщества</span><span id="communityProgressText">0 / 3 выполнено</span></div>
+          <div class="community-action-row" style="margin-top:13px"><button class="community-button" id="communityGoPlayBtn">Перейти к базе ↓</button><button class="community-button" id="communityGoGuideBtn">Изучить Polkadot ↓</button></div>
+        </article>
+        <article class="community-card">
+          <div class="community-card-title"><span class="community-card-icon">📣</span><span>Материалы для публикации</span></div>
+          <p class="community-copy">Тексты можно отредактировать и отправить вручную. Игра не публикует сообщения в соцсетях автоматически и не отслеживает переходы по приглашениям.</p>
+          <div class="community-action-row">
+            <button class="community-button primary" id="communityCopyPitchBtn">Скопировать описание проекта</button>
+            <button class="community-button" id="communityCopyDiscordBtn">Короткий текст для Discord</button>
+          </div>
+          <div class="community-field"><label for="communityPitchPreview">Черновик анонса (можно отредактировать)</label><textarea id="communityPitchPreview" rows="5" spellcheck="true">Polka Frontier — бесплатная браузерная игра-прототип о добыче ресурсов, экспедициях и развитии базы. Проект вдохновлён экосистемой Polkadot и пока тестируется. Игровые ресурсы локальные, токена и выплат нет. Попробуйте игру и поделитесь отзывом!</textarea></div>
+          <div class="community-status" id="communityPublishStatus" aria-live="polite"></div>
+        </article>
+        <article class="community-card">
+          <div class="community-card-title"><span class="community-card-icon">🛠️</span><span>Оставить отзыв разработчику</span></div>
+          <p class="community-copy">Форма не отправляет данные в интернет. Она помогает собрать понятный отзыв, который можно скопировать и отправить вручную или вставить сюда в чат.</p>
+          <div class="community-field"><label for="communityFeedbackType">Тип отзыва</label><select id="communityFeedbackType"><option value="Идея новой механики">Идея новой механики</option><option value="Нашёл ошибку">Нашёл ошибку</option><option value="Баланс и сложность">Баланс и сложность</option><option value="Знакомство с Polkadot">Материалы о Polkadot</option><option value="Дизайн и удобство">Дизайн и удобство</option></select></div>
+          <div class="community-field"><label for="communityFeedbackText">Что стоит изменить?</label><textarea id="communityFeedbackText" rows="4" maxlength="1500" placeholder="Что понравилось? Что было непонятно? На каком шаге возникла проблема?"></textarea></div>
+          <div class="community-action-row"><button class="community-button primary" id="communityCopyFeedbackBtn">Скопировать отзыв</button><button class="community-button" id="communityClearFeedbackBtn">Очистить форму</button></div>
+          <div class="community-status" id="communityFeedbackStatus" aria-live="polite"></div>
+        </article>
+        <article class="community-card">
+          <div class="community-card-title"><span class="community-card-icon">🗺️</span><span>Карта развития проекта</span></div>
+          <p class="community-copy">Прозрачный план без обещаний токенов, наград за участие или гарантированного заработка.</p>
+          <div class="community-roadmap">
+            <div class="community-roadmap-row"><div class="community-roadmap-label">СЕЙЧАС</div><div class="community-roadmap-text">Бесплатный статический прототип: добыча, база, исследования, сектора, экспедиции, локальный профиль и перенос сохранения.</div></div>
+            <div class="community-roadmap-row next"><div class="community-roadmap-label">СЛЕДОМ</div><div class="community-roadmap-text">Сбор отзывов и доработка интерфейса. Публичная таблица лидеров возможна только после подключения серверного хранилища и базовой защиты от подделки результатов.</div></div>
+            <div class="community-roadmap-row next"><div class="community-roadmap-label">ПОЗЖЕ</div><div class="community-roadmap-text">Тестирование кошелька или смарт-контракта — только отдельным этапом и сначала в тестовой сети. Сейчас игровая экономика не связана с блокчейном.</div></div>
+          </div>
+          <div class="community-action-row" style="margin-top:13px">
+            <a class="community-button" href="https://wiki.polkadot.com/general/getting-started/" target="_blank" rel="noopener noreferrer">Обзор Polkadot ↗</a>
+            <a class="community-button" href="https://polkadot.com/ecosystem" target="_blank" rel="noopener noreferrer">Экосистема ↗</a>
+          </div>
+        </article>
+      </div>
+      <div class="community-disclaimer"><strong>Важно:</strong> имя, профиль, ресурсы, отметки маршрута и рекорды хранятся в текущем браузере. Это не глобальная статистика сообщества. Не вводи seed-фразу или приватный ключ. В проекте нет выпускаемого токена, вывода средств или обещаний доходности.</div>
+    </section>
+    <div class="footer-note"><span>POLKA FRONTIER · ИГРОВОЙ ПРОТОТИП v0.8</span><span>Прогресс хранится в этом браузере · игровые ресурсы не являются токенами</span><button id="resetBtn" style="background:transparent;color:#72819b;text-decoration:underline;font-size:10px;padding:0">Сбросить прогресс</button></div>
   </main>
 </div>
 <div id="toastRoot" aria-live="polite"></div>
 <script>
 (() => {
-  const SAVE_KEY = 'polka-frontier-save-v7';
-  const LEGACY_SAVE_KEYS = ['polka-frontier-save-v6','polka-frontier-save-v5','polka-frontier-save-v4','polka-frontier-save-v3','polka-frontier-save-v2','polka-frontier-save-v1'];
+  const SAVE_KEY = 'polka-frontier-save-v8';
+  const LEGACY_SAVE_KEYS = ['polka-frontier-save-v7','polka-frontier-save-v6','polka-frontier-save-v5','polka-frontier-save-v4','polka-frontier-save-v3','polka-frontier-save-v2','polka-frontier-save-v1'];
   const state = { crystals:45, energy:100, alloy:8, plasma:0, relics:0, relicsFound:0, level:1, xp:0, drill:1, drone:0, mines:0, crystalMines:0, explores:0, generator:0, scanner:0, techGeology:0, techSurvey:0, techEfficiency:0, sector08Unlocked:false, activeSector:'07', sector08Mines:0, plasmaCore:0, achievements:{}, questClaimed:false, introMineClaimed:false, introDrillClaimed:false, introPolkadotClaimed:false, guideOpened:false, dailySignalDate:'', weeklyChallengeKey:'', weeklyMines:0, weeklyExplores:0, weeklyClaimed:false, expeditionLocation:'orbit', expeditionApproach:'standard', expeditionRuns:0, expeditionWins:0, expeditionLosses:0, expeditionRelics:0, expeditionHistory:[], profileName:'Исследователь', profileTag:'', lastTick:Date.now(), feed:[] };
   let walletAddress = null;
   const $ = id => document.getElementById(id);
@@ -483,7 +548,7 @@
   }
   function exportSaveFile(){
     save();
-    const payload={app:'Polka Frontier',formatVersion:7,exportedAt:new Date().toISOString(),save:JSON.parse(JSON.stringify(state))};
+    const payload={app:'Polka Frontier',formatVersion:8,exportedAt:new Date().toISOString(),save:JSON.parse(JSON.stringify(state))};
     const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=`polka-frontier-save-${localDayKey()}.json`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
     $('saveFileStatus').textContent='Резервная копия сформирована. Храни JSON-файл в надёжном месте.';toast('⬇️ <strong>Сохранение экспортировано.</strong>');
   }
@@ -499,6 +564,24 @@
   }
   function importSaveFile(file){
     if(!file)return;const reader=new FileReader();reader.onload=()=>{try{const parsed=JSON.parse(String(reader.result||''));const incoming=sanitizeImportedSave(parsed);if(!confirm('Импорт заменит сохранение в этом браузере текущим прогрессом из файла. Перед импортом экспортируй текущий прогресс, если хочешь сохранить оба. Продолжить?'))return;localStorage.setItem(SAVE_KEY,JSON.stringify(incoming));LEGACY_SAVE_KEYS.forEach(k=>localStorage.removeItem(k));$('saveFileStatus').textContent='Сохранение импортировано. Перезапускаю игру…';location.reload();}catch(e){$('saveFileStatus').textContent=e.message||'Не удалось прочитать файл сохранения.';}};reader.onerror=()=>{$('saveFileStatus').textContent='Не удалось прочитать выбранный файл.';};reader.readAsText(file);
+  }
+
+  function renderCommunityPanel(){
+    const steps=[
+      {root:'communityStepMining',state:'communityStepMiningState',done:state.crystalMines>0},
+      {root:'communityStepExplore',state:'communityStepExploreState',done:state.explores>0||state.expeditionRuns>0},
+      {root:'communityStepDot',state:'communityStepDotState',done:!!state.introPolkadotClaimed}
+    ];
+    let done=0;
+    steps.forEach(step=>{const complete=!!step.done;const root=$(step.root);root.classList.toggle('done',complete);root.querySelector('.community-step-check').textContent=complete?'✓':String(steps.indexOf(step)+1);$(step.state).textContent=complete?'Готово':'Впереди';if(complete)done++;});
+    $('communityProgressFill').style.width=(done/steps.length*100)+'%';$('communityProgressText').textContent=`${done} / ${steps.length} выполнено`;
+  }
+  function communityShareText(kind){
+    const url='https://elqmqn.github.io/polka-frontier/';
+    if(kind==='invite')return `🪐 Попробуй Polka Frontier — бесплатную браузерную игру об исследовании планет, добыче ресурсов и развитии базы, созданную с интересом к экосистеме Polkadot. Это ранний прототип: прогресс хранится в браузере, игровых токенов и выплат нет. Играть: ${url}`;
+    if(kind==='announcement')return `🪐 Новый эксперимент: Polka Frontier — бесплатная браузерная игра о добыче ресурсов, экспедициях и развитии аванпоста в духе космической стратегии. Сейчас это ранний прототип, который ищет первых тестировщиков. Игровые ресурсы локальные, токена и выплат нет. Попробуй и предложи улучшения: ${url}\nИсходный код: https://github.com/elqmqn/polka-frontier\n#Polkadot #PolkaFrontier`;
+    if(kind==='discord')return `Всем привет! Тестирую Polka Frontier — бесплатный браузерный прототип про добычу ресурсов, экспедиции и развитие базы. Буду рад отзывам. Прогресс пока локальный, токена и выплат нет: ${url}`;
+    return `Polka Frontier — бесплатный браузерный игровой прототип об исследовании планет, добыче ресурсов и развитии базы. Проект вдохновлён экосистемой Polkadot, сейчас собирает первые отзывы. Прогресс хранится локально; токена, выплат и глобальной таблицы лидеров пока нет.\nИгра: ${url}\nИсходный код: https://github.com/elqmqn/polka-frontier`;
   }
 
   function render(){
@@ -525,7 +608,7 @@
     $('generatorLevel').textContent=`Уровень ${state.generator} / 3 · ${state.generator?'активен':'не построен'}`; $('generatorCost').textContent=state.generator>=3?'МАКСИМУМ':`💎 ${fmt(35*(state.generator+1))} · 🔩 ${fmt(4*(state.generator+1))}`; $('generatorBtn').textContent=state.generator>=3?'МАКСИМУМ':state.generator?'УЛУЧШИТЬ':'ПОСТРОИТЬ'; $('generatorBtn').disabled=state.generator>=3||state.crystals<35*(state.generator+1)||state.alloy<4*(state.generator+1);
     $('scannerLevel').textContent=`Уровень ${state.scanner} / 3 · ${state.scanner?'активен':'не построен'}`; $('scannerCost').textContent=state.scanner>=3?'МАКСИМУМ':`💎 ${fmt(30*(state.scanner+1))} · 🔩 ${fmt(3*(state.scanner+1))}`; $('scannerBtn').textContent=state.scanner>=3?'МАКСИМУМ':state.scanner?'УЛУЧШИТЬ':'ПОСТРОИТЬ'; $('scannerBtn').disabled=state.scanner>=3||state.crystals<30*(state.scanner+1)||state.alloy<3*(state.scanner+1);
     $('exploreEnergyCost').textContent=`⚡ ${exploreEnergy} энергии`;$('exploreDescription').textContent=inEcho?'Исследуй плазменные разломы: можно найти плазму, кристаллы, сплав и редкие артефакты.':'Можно найти кристаллы, сплав или редкий артефакт.';
-    renderAchievements(); renderSectors(); renderResearch(); renderWeekly(); renderExpeditions(); renderFeed(); renderProfile();
+    renderAchievements(); renderSectors(); renderResearch(); renderWeekly(); renderExpeditions(); renderFeed(); renderProfile(); renderCommunityPanel();
   }
   function gainXP(amount){state.xp+=amount;const nextLevel=1+Math.floor(state.xp/100);if(nextLevel>state.level){state.level=nextLevel;toast('🚀 <strong>Новый уровень!</strong> Аванпост достиг уровня '+state.level+'.');log('⬆️',`Аванпост повысил уровень до ${state.level}.`);}}
   $('mineBtn').addEventListener('click',()=>{
@@ -601,6 +684,20 @@
   $('chooseImportSaveBtn').addEventListener('click',()=>$('importSaveInput').click());
   $('importSaveInput').addEventListener('change',event=>{const file=event.target.files&&event.target.files[0];if(file)importSaveFile(file);event.target.value='';});
 
+  $('communityCopyInviteBtn').addEventListener('click',()=>copyText(communityShareText('invite'),'communityActionStatus'));
+  $('communityCopyAnnouncementBtn').addEventListener('click',()=>copyText(communityShareText('announcement'),'communityActionStatus'));
+  $('communityCopyPitchBtn').addEventListener('click',()=>copyText($('communityPitchPreview').value.trim()||communityShareText('pitch'),'communityPublishStatus'));
+  $('communityCopyDiscordBtn').addEventListener('click',()=>copyText(communityShareText('discord'),'communityPublishStatus'));
+  $('communityCopyFeedbackBtn').addEventListener('click',()=>{
+    const details=$('communityFeedbackText').value.trim();
+    if(!details){$('communityFeedbackStatus').textContent='Сначала напиши пару слов об отзыве.';toast('✎ <strong>Добавь текст отзыва.</strong>');return;}
+    const text=`Polka Frontier v0.8 — отзыв тестировщика\nТип: ${$('communityFeedbackType').value}\nИмя пилота: ${state.profileName}\nБаза: уровень ${state.level}; сектор ${state.activeSector}; экспедиций: ${state.expeditionRuns}\n\nОтзыв:\n${details}\n\nИгра: https://elqmqn.github.io/polka-frontier/`;
+    copyText(text,'communityFeedbackStatus');
+  });
+  $('communityClearFeedbackBtn').addEventListener('click',()=>{$('communityFeedbackText').value='';$('communityFeedbackStatus').textContent='Форма очищена.';});
+  $('communityGoPlayBtn').addEventListener('click',()=>{document.querySelectorAll('[data-nav]').forEach(b=>b.classList.toggle('active',b.dataset.nav==='base'));$('basePanel').scrollIntoView({behavior:'smooth',block:'start'});});
+  $('communityGoGuideBtn').addEventListener('click',()=>{document.querySelectorAll('[data-nav]').forEach(b=>b.classList.toggle('active',b.dataset.nav==='polkadot'));$('polkadotGuidePanel').scrollIntoView({behavior:'smooth',block:'start'});});
+
   $('weeklyClaimBtn').addEventListener('click',()=>{ensureWeeklyCycle();if(state.weeklyMines<20||state.weeklyExplores<5||state.weeklyClaimed)return;state.weeklyClaimed=true;state.crystals+=50;state.alloy+=6;gainXP(30);log('📋','Еженедельный контракт выполнен: +50 кристаллов, +6 сплава и +30 XP.');toast('📋 <strong>Контракт закрыт!</strong> +50 💎, +6 🔩 и +30 XP.');render();save();});
 
   $('claimBtn').addEventListener('click',()=>{if(state.crystalMines<10||state.questClaimed)return;state.questClaimed=true;state.crystals+=20;state.alloy+=3;gainXP(15);log('🎁','Задание выполнено: получено 20 кристаллов и 3 сплава.');toast('🎁 <strong>Награда получена!</strong> +20 кристаллов и +3 сплава.');render();save();});
@@ -610,7 +707,7 @@
   $('introPolkadotClaim').addEventListener('click',()=>{if(!state.guideOpened||state.introPolkadotClaimed)return;state.introPolkadotClaimed=true;gainXP(30);log('🌌','Учебный этап отмечен: ознакомление с материалами Polkadot.');toast('🌌 <strong>Маршрут исследователя продвинут.</strong> +30 внутриигровых XP.');render();save();});
   $('dailySignalBtn').addEventListener('click',()=>{const today=localDayKey();if(state.dailySignalDate===today)return;state.dailySignalDate=today;state.crystals+=5;log('📡','Получен ежедневный игровой сигнал: +5 кристаллов.');toast('📡 <strong>Сигнал принят.</strong> +5 игровых кристаллов.');render();save();});
   $('resetBtn').addEventListener('click',()=>{if(!confirm('Сбросить весь локальный прогресс Polka Frontier?'))return;localStorage.removeItem(SAVE_KEY);LEGACY_SAVE_KEYS.forEach(k=>localStorage.removeItem(k));location.reload();});
-  document.querySelectorAll('[data-nav]').forEach(btn=>btn.addEventListener('click',()=>{document.querySelectorAll('[data-nav]').forEach(b=>b.classList.remove('active'));btn.classList.add('active');const nav=btn.dataset.nav;const target=nav==='missions'?'missionPanel':nav==='expeditions'?'expeditionPanel':nav==='profile'?'profilePanel':nav==='weekly'?'weeklyPanel':nav==='fleet'?'basePanel':nav==='research'?'researchLabPanel':nav==='polkadot'?'polkadotGuidePanel':nav==='expansion'?'expansionPanel':nav==='sectors'?'sectorPanel':'basePanel';$(target).scrollIntoView({behavior:'smooth',block:'start'});if(nav==='research')toast('🧬 <strong>Научный отсек</strong> — улучшай технологии за игровые ресурсы.');if(nav==='polkadot')toast('🌌 <strong>Маршрут Polkadot</strong> — официальные материалы ниже.');if(nav==='expeditions')toast('🛰️ <strong>Экспедиционный корпус</strong> — выбирай место и тактику миссии.');if(nav==='profile')toast('◎ <strong>Профиль пилота</strong> — настрой имя, поделись результатом или экспортируй сохранение.');if(nav==='weekly')toast('📋 <strong>Еженедельный контракт</strong> — выполни обе задачи и забери награду.');if(nav==='fleet')toast('⛏ <strong>Добыча</strong> — добывай ресурсы и улучшай оборудование.');if(nav==='expansion')toast('🏗️ <strong>Развитие базы</strong> — улучшай энергосеть, сканер и открывай достижения.');if(nav==='sectors')toast('🪐 <strong>Карта секторов</strong> — открой Эхо-9, когда база достигнет уровня 3.');}));
+  document.querySelectorAll('[data-nav]').forEach(btn=>btn.addEventListener('click',()=>{document.querySelectorAll('[data-nav]').forEach(b=>b.classList.remove('active'));btn.classList.add('active');const nav=btn.dataset.nav;const target=nav==='missions'?'missionPanel':nav==='expeditions'?'expeditionPanel':nav==='profile'?'profilePanel':nav==='weekly'?'weeklyPanel':nav==='fleet'?'basePanel':nav==='research'?'researchLabPanel':nav==='polkadot'?'polkadotGuidePanel':nav==='community'?'communityPanel':nav==='expansion'?'expansionPanel':nav==='sectors'?'sectorPanel':'basePanel';$(target).scrollIntoView({behavior:'smooth',block:'start'});if(nav==='research')toast('🧬 <strong>Научный отсек</strong> — улучшай технологии за игровые ресурсы.');if(nav==='polkadot')toast('🌌 <strong>Маршрут Polkadot</strong> — официальные материалы ниже.');if(nav==='expeditions')toast('🛰️ <strong>Экспедиционный корпус</strong> — выбирай место и тактику миссии.');if(nav==='profile')toast('◎ <strong>Профиль пилота</strong> — настрой имя, поделись результатом или экспортируй сохранение.');if(nav==='weekly')toast('📋 <strong>Еженедельный контракт</strong> — выполни обе задачи и забери награду.');if(nav==='fleet')toast('⛏ <strong>Добыча</strong> — добывай ресурсы и улучшай оборудование.');if(nav==='expansion')toast('🏗️ <strong>Развитие базы</strong> — улучшай энергосеть, сканер и открывай достижения.');if(nav==='sectors')toast('🪐 <strong>Карта секторов</strong> — открой Эхо-9, когда база достигнет уровня 3.');if(nav==='community')toast('✦ <strong>Штаб сообщества</strong> — приглашай тестировщиков и собирай отзывы вручную.');}));
   const CHAIN_ID='0x'+(420420417).toString(16);
   const chainParams={chainId:CHAIN_ID,chainName:'Polkadot Hub TestNet',nativeCurrency:{name:'Paseo',symbol:'PAS',decimals:18},rpcUrls:['https://services.polkadothub-rpc.com/testnet/'],blockExplorerUrls:['https://blockscout-testnet.polkadot.io/']};
   async function connectWallet(){
@@ -626,6 +723,7 @@
     if(state.drone){state._droneProgress=(state._droneProgress||0)+elapsed;if(state._droneProgress>=5000){const cycles=Math.floor(state._droneProgress/5000);state._droneProgress%=5000;state.crystals+=cycles*2*state.drone;state.alloy+=Math.floor(cycles/3)*state.drone;}}
     render();save();},1000);
   render();
+  save(); // Persist migrated v0.7 data as v0.8 immediately.
 })();
 </script>
 </body>
