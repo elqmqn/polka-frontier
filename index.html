@@ -1,10 +1,10 @@
 <!doctype html>
 <html lang="ru">
-<!-- Polka Frontier v0.2: browser-only game; game items are fictional local data, not crypto assets. -->
+<!-- Polka Frontier v0.3: browser-only game; game items are fictional local data, not crypto assets. -->
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Polka Frontier — Prototype v0.2</title>
+<title>Polka Frontier — Prototype v0.3</title>
 <style>
   :root{--bg:#090d18;--panel:#11182a;--panel2:#151f35;--line:#24324e;--text:#edf3ff;--muted:#8d9bb7;--cyan:#5de7dc;--violet:#a78bfa;--gold:#f8c76a;--green:#89f0a5;--red:#ff8799}
   *{box-sizing:border-box} html{background:var(--bg)} body{margin:0;color:var(--text);font:15px/1.45 Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:radial-gradient(ellipse at 75% -10%,#182e54 0%,transparent 45%),radial-gradient(ellipse at 0% 45%,#171338 0%,transparent 36%),var(--bg);min-height:100vh}
@@ -20,6 +20,11 @@
   @keyframes float{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-8px) rotate(3deg)}}
   .under-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:15px}.upgrade{padding:16px;border:1px solid var(--line);border-radius:14px;background:rgba(17,25,43,.83)}.upgrade-top{display:flex;align-items:center;gap:11px}.upgrade-icon{height:42px;width:42px;border-radius:12px;background:#23314c;display:grid;place-items:center;font-size:21px}.upgrade h3{font-size:12px;margin:0 0 3px}.upgrade .mini{font-size:10px;color:var(--muted)}.upgrade p{font-size:11px;line-height:1.5;color:#a3b0c9;min-height:34px;margin:13px 0}.upgrade-foot{display:flex;align-items:center;justify-content:space-between;gap:8px}.cost{font-size:10px;color:var(--gold)}.buy{background:#253b53;color:#c5fff5;border:1px solid #35596e;padding:8px 10px;border-radius:8px;font-size:10px;font-weight:800;white-space:nowrap}.buy:disabled{background:#1b2437;border-color:#29334a}
   .right-stack{display:grid;gap:16px}.mission{padding:17px 19px}.mission-row{display:flex;gap:12px;align-items:flex-start}.mission-icon{width:40px;height:40px;border-radius:12px;background:#2b234c;display:grid;place-items:center;font-size:19px;flex:none}.mission-name{font-weight:750;font-size:12px}.mission-desc{font-size:10px;color:var(--muted);margin-top:4px}.progress-track{height:5px;border-radius:99px;background:#263149;overflow:hidden;margin-top:12px}.progress-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--violet),var(--cyan));width:0%;transition:width .3s}.mission-bottom{display:flex;justify-content:space-between;gap:8px;align-items:center;margin-top:9px;font-size:10px;color:#95a5c1}.claim{background:#3c3262;color:#ded4ff;padding:7px 9px;border-radius:8px;font-size:10px;font-weight:800}.feed{padding:4px 19px 12px}.feed-item{display:flex;align-items:flex-start;gap:11px;padding:12px 0;border-bottom:1px solid #202a40}.feed-item:last-child{border-bottom:0}.feed-icon{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;background:#1d3040;flex:none}.feed-text{font-size:11px;color:#d7e1f4}.feed-time{font-size:9px;color:#6c7d99;margin-top:4px}.empty{font-size:11px;color:var(--muted);padding:17px 0}.footer-note{display:flex;justify-content:space-between;gap:12px;margin-top:18px;color:#61718e;font-size:10px;flex-wrap:wrap}.toast{position:fixed;right:24px;bottom:24px;background:#17243a;border:1px solid #425878;color:#e8f3ff;padding:13px 16px;border-radius:12px;box-shadow:0 15px 40px #0008;max-width:min(360px,calc(100vw - 32px));z-index:10;animation:pop .2s ease}.toast strong{color:var(--cyan)}@keyframes pop{from{transform:translateY(10px);opacity:0}to{transform:translateY(0);opacity:1}}
+
+  .base-expansion{margin-top:18px}.expansion-intro{padding:19px 20px;border-bottom:1px solid #202c45;background:linear-gradient(120deg,rgba(35,49,80,.55),rgba(15,23,39,.22))}.expansion-intro h2{font-size:18px;margin:4px 0 5px;letter-spacing:-.025em}.expansion-intro p{font-size:11px;color:#a4b2cb;line-height:1.6;margin:0;max-width:800px}.module-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;padding:15px}.module-card{padding:16px;border:1px solid #263552;border-radius:13px;background:rgba(13,20,35,.8)}.module-head{display:flex;align-items:center;gap:11px}.module-icon{width:43px;height:43px;border-radius:12px;background:#26334f;display:grid;place-items:center;font-size:21px;flex:none}.module-title{font-size:12px;font-weight:800}.module-level{font-size:10px;color:var(--muted);margin-top:3px}.module-card p{font-size:11px;line-height:1.55;color:#aab7cf;margin:13px 0;min-height:34px}.module-foot{display:flex;align-items:center;justify-content:space-between;gap:10px}.module-cost{font-size:10px;color:var(--gold)}.module-button{background:#223b51;border:1px solid #355c70;color:#d6fff8;border-radius:8px;padding:9px 10px;font-size:10px;font-weight:800;white-space:nowrap}.module-button:disabled{opacity:.4;cursor:not-allowed}.section-subhead{padding:4px 20px 0;font-size:10px;letter-spacing:.13em;color:#8192b1;font-weight:800}.achievement-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;padding:13px 15px 17px}.achievement-card{border:1px solid #283650;background:rgba(13,20,35,.72);border-radius:12px;padding:13px;min-width:0}.achievement-top{display:flex;align-items:center;gap:9px}.achievement-icon{width:35px;height:35px;border-radius:10px;background:#26334f;display:grid;place-items:center;font-size:18px;flex:none}.achievement-name{font-size:11px;font-weight:800}.achievement-desc{font-size:10px;line-height:1.5;color:#a2b0c8;margin:10px 0;min-height:30px}.achievement-progress{font-size:9px;color:#8092b0;display:flex;justify-content:space-between;gap:6px}.achievement-track{height:4px;background:#273149;border-radius:99px;overflow:hidden;margin-top:7px}.achievement-fill{height:100%;background:linear-gradient(90deg,var(--violet),var(--cyan));border-radius:99px}.achievement-foot{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:11px}.achievement-reward{font-size:9px;color:var(--gold)}.achievement-claim{background:#3c3262;color:#ded4ff;padding:7px 9px;border-radius:8px;font-size:9px;font-weight:800;white-space:nowrap}.achievement-claim:disabled{opacity:.45;cursor:not-allowed}.achievement-card.claimed{border-color:#2d675f}.achievement-card.claimed .achievement-icon{background:#1c423e}.achievement-summary{margin:0 15px 15px;padding:10px 12px;border:1px solid #29344a;background:#151c2a;border-radius:10px;color:#a8b7cf;font-size:10px}
+  @media(max-width:1050px){.achievement-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+  @media(max-width:650px){.module-grid,.achievement-grid{grid-template-columns:1fr}.module-card p{min-height:0}.achievement-desc{min-height:0}}
+
   @media(max-width:1050px){.app{grid-template-columns:190px minmax(0,1fr)}aside{padding:22px 12px}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.content-grid{grid-template-columns:minmax(0,1fr)}}
   @media(max-width:650px){.app{display:block}aside{border-right:0;border-bottom:1px solid #202a40;padding:13px 15px;gap:12px}.brand{padding:0}.brand-sub{display:none}.nav-wrap,.aside-bottom{display:none}main{padding:20px 13px}.topbar{align-items:flex-start;flex-direction:column}.top-right{width:100%;justify-content:space-between}.stats{gap:8px}.stat{padding:13px}.stat-number{font-size:21px}.under-grid{grid-template-columns:1fr}.planet{min-height:290px}.network-pill{font-size:10px}.content-grid{gap:13px}}
 
@@ -32,11 +37,11 @@
 <div class="app">
   <aside>
     <div class="brand"><div class="logo">P</div><div><div class="brand-name">POLKA FRONTIER</div><div class="brand-sub">WEB3 EXPLORATION</div></div></div>
-    <div class="nav-wrap"><div class="nav-label">КОМАНДНЫЙ ЦЕНТР</div><nav class="nav"><button class="active" data-nav="base"><span class="ico">◈</span>Моя база</button><button data-nav="fleet"><span class="ico">⛏</span>Добыча</button><button data-nav="research"><span class="ico">⌘</span>Технологии</button><button data-nav="missions"><span class="ico">✧</span>Задания</button></nav></div>
-    <div class="aside-bottom"><div class="status-card"><div class="status-top"><span><i class="dot"></i>СИСТЕМЫ В НОРМЕ</span><span>v0.2</span></div><div class="status-title">Аванпост «Искра»</div><div class="status-copy">Сектор 07 · Неизведанный рубеж</div></div></div>
+    <div class="nav-wrap"><div class="nav-label">КОМАНДНЫЙ ЦЕНТР</div><nav class="nav"><button class="active" data-nav="base"><span class="ico">◈</span>Моя база</button><button data-nav="fleet"><span class="ico">⛏</span>Добыча</button><button data-nav="research"><span class="ico">⌘</span>Технологии</button><button data-nav="missions"><span class="ico">✧</span>Задания</button><button data-nav="expansion"><span class="ico">⌂</span>Развитие базы</button></nav></div>
+    <div class="aside-bottom"><div class="status-card"><div class="status-top"><span><i class="dot"></i>СИСТЕМЫ В НОРМЕ</span><span>v0.3</span></div><div class="status-title">Аванпост «Искра»</div><div class="status-copy">Сектор 07 · Неизведанный рубеж</div></div></div>
   </aside>
   <main>
-    <header class="topbar"><div><div class="eyebrow">СЕКТОР 07 / НЕИЗВЕДАННЫЙ РУБЕЖ</div><h1 class="page-title">Командный центр</h1></div><div class="top-right"><div class="network-pill"><b>●</b> DEMO MODE · POLKADOT HUB</div><button class="wallet" id="walletBtn" title="Необязательно. Подключение не отправляет игровых транзакций.">Подключить кошелёк ↗</button></div></header>
+    <header class="topbar"><div><div class="eyebrow">СЕКТОР 07 / НЕИЗВЕДАННЫЙ РУБЕЖ</div><h1 class="page-title">Командный центр</h1></div><div class="top-right"><div class="network-pill"><b>●</b> DEMO MODE · БЕЗ ТРАНЗАКЦИЙ</div><button class="wallet" id="walletBtn" title="Необязательно. Подключение не отправляет игровых транзакций.">Подключить кошелёк ↗</button></div></header>
     <section class="stats">
       <div class="stat" style="--glow:#5de7dc"><div class="stat-label">💎 Кристаллы</div><div class="stat-number" id="crystals">45</div><div class="stat-change">Основной ресурс</div></div>
       <div class="stat" style="--glow:#a78bfa"><div class="stat-label">⚡ Энергия</div><div class="stat-number"><span id="energy">100</span><span style="font-size:12px;color:#7183a3;font-weight:600"> / 100</span></div><div class="stat-change" id="energyState">Система заряжена</div></div>
@@ -59,10 +64,34 @@
         <section class="panel"><div class="panel-head"><div><div class="panel-title">РАЗВЕДКА ТЕРРИТОРИЙ</div><div class="panel-sub">Исследуй окрестности аванпоста</div></div><span class="tag">RISK / REWARD</span></div><div class="mission"><div class="mission-row"><div class="mission-icon" style="background:#173e43">🛰️</div><div style="flex:1"><div class="mission-name">Отправить разведывательный дрон</div><div class="mission-desc">Потрать 15 энергии. Можно найти кристаллы или редкий сплав.</div><div class="mission-bottom" style="margin-top:12px"><span>⚡ 15 энергии</span><button class="claim" id="exploreBtn">НАЧАТЬ РАЗВЕДКУ</button></div></div></div></div></section>
       </div>
     </section>
+
+    <section class="panel base-expansion" id="expansionPanel" aria-labelledby="expansionTitle">
+      <div class="expansion-intro">
+        <div class="eyebrow">ИНЖЕНЕРНЫЙ ОТСЕК · ВЕРСИЯ 0.3</div>
+        <h2 id="expansionTitle">Развивай инфраструктуру аванпоста</h2>
+        <p>Построй энергомодуль для более быстрого восстановления энергии и сканер для улучшения разведки. Прогресс и награды остаются игровыми данными в этом браузере.</p>
+      </div>
+      <div class="module-grid">
+        <article class="module-card">
+          <div class="module-head"><div class="module-icon">⚡</div><div><div class="module-title">Энергомодуль</div><div class="module-level" id="generatorLevel">Уровень 0 / 3 · не построен</div></div></div>
+          <p>Ускоряет восстановление энергии на 50% за каждый уровень. Полезен для частой добычи и экспедиций.</p>
+          <div class="module-foot"><span class="module-cost" id="generatorCost">💎 35 · 🔩 4</span><button class="module-button" id="generatorBtn">ПОСТРОИТЬ</button></div>
+        </article>
+        <article class="module-card">
+          <div class="module-head"><div class="module-icon">📡</div><div><div class="module-title">Сканер местности</div><div class="module-level" id="scannerLevel">Уровень 0 / 3 · не построен</div></div></div>
+          <p>Увеличивает награды разведки: больше найденных кристаллов и сплава за успешную экспедицию.</p>
+          <div class="module-foot"><span class="module-cost" id="scannerCost">💎 30 · 🔩 3</span><button class="module-button" id="scannerBtn">ПОСТРОИТЬ</button></div>
+        </article>
+      </div>
+      <div class="panel-head"><div><div class="panel-title">ДОСТИЖЕНИЯ ИССЛЕДОВАТЕЛЯ</div><div class="panel-sub">Выполняй долгосрочные цели и забирай разовые игровые награды</div></div><span class="tag" id="achievementCount">0 / 6</span></div>
+      <div class="achievement-grid" id="achievementGrid"></div>
+      <div class="achievement-summary" id="achievementSummary">Достижения отслеживают твой прогресс: добычу, развитие базы, разведку и знакомство с Polkadot.</div>
+    </section>
+
     <section class="panel onboarding" id="polkadotGuidePanel" aria-labelledby="guideTitle">
       <div class="onboarding-intro">
         <div>
-          <div class="eyebrow">МАРШРУТ ИССЛЕДОВАТЕЛЯ · ВЕРСИЯ 0.2</div>
+          <div class="eyebrow">МАРШРУТ ИССЛЕДОВАТЕЛЯ · ВЕРСИЯ 0.3</div>
           <h2 id="guideTitle">Освой базу — познакомься с Polkadot</h2>
           <p>Выполняй игровые задания, открывай официальные материалы и узнавай, как устроена экосистема. Подключать кошелёк необязательно. Все награды ниже — только внутриигровые очки и ресурсы.</p>
         </div>
@@ -95,18 +124,18 @@
         <a class="learn-btn" href="https://polkadot.com/ecosystem" target="_blank" rel="noopener noreferrer">Каталог экосистемы ↗</a>
         <a class="learn-btn" href="https://docs.polkadot.com/smart-contracts/overview/" target="_blank" rel="noopener noreferrer">Polkadot Hub и смарт-контракты ↗</a>
       </div>
-      <div class="local-disclaimer">Важно: добываемые здесь кристаллы и сплавы — игровые данные, а не DOT или другие токены. Прогресс хранится локально в браузере, пока не подключён к серверу или блокчейну. Кнопка подключения кошелька не отправляет игровые транзакции. Никогда не вводи seed-фразу или приватный ключ на сайте игры.</div>
+      <div class="local-disclaimer">Важно: добываемые здесь кристаллы и сплавы — игровые данные, а не DOT или другие токены. Прогресс хранится локально в браузере, пока не подключён к серверу или блокчейну. Кнопка подключения кошелька не отправляет игровые транзакции. Игра пока не связана с контрактом Polkadot. Никогда не вводи seed-фразу или приватный ключ на сайте игры.</div>
       <div class="daily-strip"><div class="daily-copy"><strong>📡 Ежедневный сигнал</strong><span id="dailySignalText">Забери небольшой внутриигровой бонус сегодня.</span></div><button class="learn-btn secondary" id="dailySignalBtn">Получить +5 💎</button></div>
     </section>
-    <div class="footer-note"><span>POLKA FRONTIER · ИГРОВОЙ ПРОТОТИП v0.2</span><span>Прогресс хранится в этом браузере · Токены не используются</span><button id="resetBtn" style="background:transparent;color:#72819b;text-decoration:underline;font-size:10px;padding:0">Сбросить прогресс</button></div>
+    <div class="footer-note"><span>POLKA FRONTIER · ИГРОВОЙ ПРОТОТИП v0.3</span><span>Прогресс хранится в этом браузере · Токены не используются</span><button id="resetBtn" style="background:transparent;color:#72819b;text-decoration:underline;font-size:10px;padding:0">Сбросить прогресс</button></div>
   </main>
 </div>
 <div id="toastRoot" aria-live="polite"></div>
 <script>
 (() => {
-  const SAVE_KEY = 'polka-frontier-save-v2';
-  const LEGACY_SAVE_KEY = 'polka-frontier-save-v1';
-  const state = { crystals:45, energy:100, alloy:8, level:1, xp:0, drill:1, drone:0, mines:0, questClaimed:false, introMineClaimed:false, introDrillClaimed:false, introPolkadotClaimed:false, guideOpened:false, dailySignalDate:'', lastTick:Date.now(), feed:[] };
+  const SAVE_KEY = 'polka-frontier-save-v3';
+  const LEGACY_SAVE_KEYS = ['polka-frontier-save-v2','polka-frontier-save-v1'];
+  const state = { crystals:45, energy:100, alloy:8, level:1, xp:0, drill:1, drone:0, mines:0, explores:0, generator:0, scanner:0, achievements:{}, questClaimed:false, introMineClaimed:false, introDrillClaimed:false, introPolkadotClaimed:false, guideOpened:false, dailySignalDate:'', lastTick:Date.now(), feed:[] };
   let walletAddress = null;
   const $ = id => document.getElementById(id);
   const fmt = n => Math.floor(n).toLocaleString('ru-RU');
@@ -114,11 +143,12 @@
   const localDayKey = () => { const d=new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; };
   function load(){
     try {
-      const saved=JSON.parse(localStorage.getItem(SAVE_KEY)||localStorage.getItem(LEGACY_SAVE_KEY)||'null');
+      const saved=JSON.parse(localStorage.getItem(SAVE_KEY)||LEGACY_SAVE_KEYS.map(k=>localStorage.getItem(k)).find(Boolean)||'null');
       if(saved && typeof saved==='object'){
         Object.keys(state).forEach(key=>{ if(Object.prototype.hasOwnProperty.call(saved,key)) state[key]=saved[key]; });
-        ['crystals','energy','alloy','level','xp','drill','drone','mines'].forEach(key=>{ const n=Number(state[key]); state[key]=Number.isFinite(n)?Math.max(0,n):0; });
-        state.energy=clamp(state.energy,0,100); state.level=Math.max(1,Math.floor(state.level)); state.drill=Math.max(1,Math.floor(state.drill)); state.drone=Math.floor(state.drone); state.mines=Math.floor(state.mines);
+        ['crystals','energy','alloy','level','xp','drill','drone','mines','explores','generator','scanner'].forEach(key=>{ const n=Number(state[key]); state[key]=Number.isFinite(n)?Math.max(0,n):0; });
+        state.energy=clamp(state.energy,0,100); state.level=Math.max(1,Math.floor(state.level)); state.drill=Math.max(1,Math.floor(state.drill)); state.drone=Math.floor(state.drone); state.mines=Math.floor(state.mines); state.explores=Math.floor(state.explores); state.generator=clamp(Math.floor(state.generator),0,3); state.scanner=clamp(Math.floor(state.scanner),0,3);
+        state.achievements=state.achievements&&typeof state.achievements==='object'&&!Array.isArray(state.achievements)?state.achievements:{};
         state.feed=Array.isArray(state.feed)?state.feed.slice(0,5):[]; state.lastTick=Date.now();
       }
     } catch(e) { console.warn('Save could not be loaded; starting fresh.',e); }
@@ -127,6 +157,29 @@
   function toast(message){ const root=$('toastRoot'); root.innerHTML=''; const el=document.createElement('div');el.className='toast';el.innerHTML=message;root.appendChild(el);setTimeout(()=>{if(el.parentNode)el.remove()},3000); }
   function log(icon,message){ state.feed.unshift({icon,message,time:new Date().toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'})});state.feed=state.feed.slice(0,5);renderFeed();save(); }
   function renderFeed(){ const box=$('feed'); if(!state.feed.length){box.innerHTML='<div class="empty">Системы запущены. Ждём первое действие…</div>';return;}box.innerHTML=state.feed.map(x=>`<div class="feed-item"><div class="feed-icon">${x.icon}</div><div><div class="feed-text">${x.message}</div><div class="feed-time">${x.time}</div></div></div>`).join(''); }
+  const achievementDefs = [
+    {id:'miner25',icon:'💎',name:'Полевой шахтёр',desc:'Добудь 25 партий кристаллов.',progress:()=>`${Math.min(state.mines,25)} / 25 добыч`,ratio:()=>state.mines/25,done:()=>state.mines>=25,reward:'💎 +25 · XP +15',give:()=>{state.crystals+=25;gainXP(15);}},
+    {id:'explorer5',icon:'🛰️',name:'Картограф рубежа',desc:'Проведи пять экспедиций за пределы базы.',progress:()=>`${Math.min(state.explores,5)} / 5 экспедиций`,ratio:()=>state.explores/5,done:()=>state.explores>=5,reward:'🔩 +5 · XP +20',give:()=>{state.alloy+=5;gainXP(20);}},
+    {id:'drill3',icon:'⛏️',name:'Глубокое бурение',desc:'Улучши буровую установку до уровня 3.',progress:()=>`Уровень ${Math.min(state.drill,3)} / 3`,ratio:()=>state.drill/3,done:()=>state.drill>=3,reward:'💎 +30 · XP +20',give:()=>{state.crystals+=30;gainXP(20);}},
+    {id:'drone1',icon:'🤖',name:'Автоматизация',desc:'Построй первый добывающий дрон.',progress:()=>state.drone>=1?'Дрон активен':'Дрон не построен',ratio:()=>state.drone>=1?1:0,done:()=>state.drone>=1,reward:'🔩 +4 · XP +25',give:()=>{state.alloy+=4;gainXP(25);}},
+    {id:'power2',icon:'⚡',name:'Энергосеть',desc:'Развей энергомодуль до уровня 2.',progress:()=>`Уровень ${Math.min(state.generator,2)} / 2`,ratio:()=>state.generator/2,done:()=>state.generator>=2,reward:'💎 +35 · XP +20',give:()=>{state.crystals+=35;gainXP(20);}},
+    {id:'polkadot',icon:'🌌',name:'Знакомство с Polkadot',desc:'Открой и отметь официальный вводный материал.',progress:()=>state.introPolkadotClaimed?'Материал изучен':'Этап ещё не завершён',ratio:()=>state.introPolkadotClaimed?1:0,done:()=>state.introPolkadotClaimed,reward:'💎 +30 · XP +30',give:()=>{state.crystals+=30;gainXP(30);}}
+  ];
+  function renderAchievements(){
+    const grid=$('achievementGrid');
+    grid.innerHTML=achievementDefs.map(a=>{
+      const claimed=!!state.achievements[a.id]; const done=a.done(); const ratio=clamp(Math.round(a.ratio()*100),0,100);
+      return `<article class="achievement-card ${claimed?'claimed':''}"><div class="achievement-top"><div class="achievement-icon">${a.icon}</div><div class="achievement-name">${a.name}</div></div><div class="achievement-desc">${a.desc}</div><div class="achievement-progress"><span>${a.progress()}</span><span>${claimed?'Получено':done?'Готово':ratio+'%'}</span></div><div class="achievement-track"><div class="achievement-fill" style="width:${ratio}%"></div></div><div class="achievement-foot"><span class="achievement-reward">${a.reward}</span><button class="achievement-claim" data-achievement="${a.id}" ${(!done||claimed)?'disabled':''}>${claimed?'ПОЛУЧЕНО':done?'ЗАБРАТЬ':'В ПРОЦЕССЕ'}</button></div></article>`;
+    }).join('');
+    const claimed=achievementDefs.filter(a=>state.achievements[a.id]).length;
+    $('achievementCount').textContent=`${claimed} / ${achievementDefs.length}`;
+    $('achievementSummary').textContent=claimed===achievementDefs.length?'Все текущие достижения выполнены! Исследуй дальше и жди новых модулей.':`Получено достижений: ${claimed} из ${achievementDefs.length}. Награды выдаются один раз и сохраняются в этом браузере.`;
+    grid.querySelectorAll('[data-achievement]').forEach(btn=>btn.addEventListener('click',()=>claimAchievement(btn.dataset.achievement)));
+  }
+  function claimAchievement(id){
+    const a=achievementDefs.find(item=>item.id===id); if(!a||!a.done()||state.achievements[id])return;
+    state.achievements[id]=true; a.give(); log('🏅',`Достижение «${a.name}» получено. Награда: ${a.reward}.`); toast(`🏅 <strong>Достижение получено!</strong> ${a.name}`); render(); save();
+  }
   function render(){
     $('crystals').textContent=fmt(state.crystals);$('energy').textContent=fmt(state.energy);$('alloy').textContent=fmt(state.alloy);$('level').textContent=state.level;$('xpLabel').textContent=`Исследователь · ${fmt(state.xp)} XP`;
     $('drillLevel').textContent=state.drill;$('drillCost').textContent=`💎 ${fmt(30*state.drill)}`;$('drillBtn').disabled=state.crystals<30*state.drill;
@@ -146,21 +199,25 @@
     const routeDone=[state.introMineClaimed,state.introDrillClaimed,state.introPolkadotClaimed].filter(Boolean).length;
     $('routeProgressText').textContent=`${routeDone} / 3 этапа`; $('routeProgressFill').style.width=(routeDone/3*100)+'%';
     const today=localDayKey(); const dailyReady=state.dailySignalDate!==today; $('dailySignalBtn').disabled=!dailyReady; $('dailySignalBtn').textContent=dailyReady?'Получить +5 💎':'Получено сегодня'; $('dailySignalText').textContent=dailyReady?'Бонус для возвращения в игру; хранится локально.':'На сегодня сигнал уже активирован в этом браузере.';
-    renderFeed();
+    $('generatorLevel').textContent=`Уровень ${state.generator} / 3 · ${state.generator?'активен':'не построен'}`; $('generatorCost').textContent=state.generator>=3?'МАКСИМУМ':`💎 ${fmt(35*(state.generator+1))} · 🔩 ${fmt(4*(state.generator+1))}`; $('generatorBtn').textContent=state.generator>=3?'МАКСИМУМ':state.generator?'УЛУЧШИТЬ':'ПОСТРОИТЬ'; $('generatorBtn').disabled=state.generator>=3||state.crystals<35*(state.generator+1)||state.alloy<4*(state.generator+1);
+    $('scannerLevel').textContent=`Уровень ${state.scanner} / 3 · ${state.scanner?'активен':'не построен'}`; $('scannerCost').textContent=state.scanner>=3?'МАКСИМУМ':`💎 ${fmt(30*(state.scanner+1))} · 🔩 ${fmt(3*(state.scanner+1))}`; $('scannerBtn').textContent=state.scanner>=3?'МАКСИМУМ':state.scanner?'УЛУЧШИТЬ':'ПОСТРОИТЬ'; $('scannerBtn').disabled=state.scanner>=3||state.crystals<30*(state.scanner+1)||state.alloy<3*(state.scanner+1);
+    renderAchievements(); renderFeed();
   }
   function gainXP(amount){state.xp+=amount;const nextLevel=1+Math.floor(state.xp/100);if(nextLevel>state.level){state.level=nextLevel;toast('🚀 <strong>Новый уровень!</strong> Аванпост достиг уровня '+state.level+'.');log('⬆️',`Аванпост повысил уровень до ${state.level}.`);}}
   $('mineBtn').addEventListener('click',()=>{if(state.energy<4)return;state.energy-=4;const gained=3+2*(state.drill-1);state.crystals+=gained;state.mines++;gainXP(8);let msg=`Добыто ${gained} кристалла.`;if(Math.random()<.22){state.alloy+=1;msg+=' Найден 1 сплав!';}log('💎',msg);render();save();});
   $('drillBtn').addEventListener('click',()=>{const cost=30*state.drill;if(state.crystals<cost)return;state.crystals-=cost;state.drill++;gainXP(20);log('⛏️',`Буровая установка улучшена до уровня ${state.drill}.`);toast('⛏️ <strong>Модуль улучшен.</strong> Добыча выросла.');render();save();});
   $('droneBtn').addEventListener('click',()=>{const cc=70*(state.drone+1),ac=20*(state.drone+1);if(state.crystals<cc||state.alloy<ac)return;state.crystals-=cc;state.alloy-=ac;state.drone++;gainXP(25);log('🤖',`Добывающий дрон ${state.drone===1?'построен':`улучшен до уровня ${state.drone}`} и запущен.`);toast('🤖 <strong>Дрон активирован.</strong> Он работает автоматически.');render();save();});
-  $('exploreBtn').addEventListener('click',()=>{if(state.energy<15)return;state.energy-=15;const roll=Math.random();let msg;if(roll<.62){const n=8+Math.floor(Math.random()*16);state.crystals+=n;msg=`Разведка успешна: обнаружено ${n} кристаллов.`;log('💎',msg);toast('🛰️ <strong>Нашли ресурсы!</strong> +'+n+' кристаллов.');}else{const n=2+Math.floor(Math.random()*5);state.alloy+=n;msg=`Обнаружен обломок старого корабля: +${n} сплава.`;log('🔩',msg);toast('🛰️ <strong>Редкая находка!</strong> +'+n+' сплава.');}gainXP(12);render();save();});
+  $('exploreBtn').addEventListener('click',()=>{if(state.energy<15)return;state.energy-=15;const roll=Math.random();let msg;if(roll<.62){const n=8+Math.floor(Math.random()*16)+state.scanner*3;state.crystals+=n;msg=`Разведка успешна: обнаружено ${n} кристаллов.`;log('💎',msg);toast('🛰️ <strong>Нашли ресурсы!</strong> +'+n+' кристаллов.');}else{const n=2+Math.floor(Math.random()*5)+state.scanner;state.alloy+=n;msg=`Обнаружен обломок старого корабля: +${n} сплава.`;log('🔩',msg);toast('🛰️ <strong>Редкая находка!</strong> +'+n+' сплава.');}state.explores++;gainXP(12);render();save();});
+  $('generatorBtn').addEventListener('click',()=>{if(state.generator>=3)return;const c=35*(state.generator+1),a=4*(state.generator+1);if(state.crystals<c||state.alloy<a)return;state.crystals-=c;state.alloy-=a;state.generator++;gainXP(18);log('⚡',`Энергомодуль улучшен до уровня ${state.generator}. Восстановление энергии ускорено.`);toast('⚡ <strong>Энергосеть расширена.</strong> Энергия восстанавливается быстрее.');render();save();});
+  $('scannerBtn').addEventListener('click',()=>{if(state.scanner>=3)return;const c=30*(state.scanner+1),a=3*(state.scanner+1);if(state.crystals<c||state.alloy<a)return;state.crystals-=c;state.alloy-=a;state.scanner++;gainXP(15);log('📡',`Сканер местности улучшен до уровня ${state.scanner}. Награды разведки увеличены.`);toast('📡 <strong>Сканер улучшен.</strong> Разведка стала эффективнее.');render();save();});
   $('claimBtn').addEventListener('click',()=>{if(state.mines<10||state.questClaimed)return;state.questClaimed=true;state.crystals+=20;state.alloy+=3;gainXP(15);log('🎁','Задание выполнено: получено 20 кристаллов и 3 сплава.');toast('🎁 <strong>Награда получена!</strong> +20 кристаллов и +3 сплава.');render();save();});
   $('introMineClaim').addEventListener('click',()=>{if(state.mines<3||state.introMineClaimed)return;state.introMineClaimed=true;state.crystals+=15;gainXP(10);log('🧭','Учебный этап завершён: освоена добыча.');toast('🧭 <strong>Этап завершён!</strong> +15 игровых кристаллов и +10 XP.');render();save();});
   $('introDrillClaim').addEventListener('click',()=>{if(state.drill<2||state.introDrillClaimed)return;state.introDrillClaimed=true;state.crystals+=20;gainXP(20);log('🛠️','Учебный этап завершён: буровая установка улучшена.');toast('🛠️ <strong>База укреплена!</strong> +20 игровых кристаллов и +20 XP.');render();save();});
   $('openPolkadotGuide').addEventListener('click',()=>{state.guideOpened=true;save();render();});
   $('introPolkadotClaim').addEventListener('click',()=>{if(!state.guideOpened||state.introPolkadotClaimed)return;state.introPolkadotClaimed=true;gainXP(30);log('🌌','Учебный этап отмечен: ознакомление с материалами Polkadot.');toast('🌌 <strong>Маршрут исследователя продвинут.</strong> +30 внутриигровых XP.');render();save();});
   $('dailySignalBtn').addEventListener('click',()=>{const today=localDayKey();if(state.dailySignalDate===today)return;state.dailySignalDate=today;state.crystals+=5;log('📡','Получен ежедневный игровой сигнал: +5 кристаллов.');toast('📡 <strong>Сигнал принят.</strong> +5 игровых кристаллов.');render();save();});
-  $('resetBtn').addEventListener('click',()=>{if(!confirm('Сбросить весь локальный прогресс Polka Frontier?'))return;localStorage.removeItem(SAVE_KEY);location.reload();});
-  document.querySelectorAll('[data-nav]').forEach(btn=>btn.addEventListener('click',()=>{document.querySelectorAll('[data-nav]').forEach(b=>b.classList.remove('active'));btn.classList.add('active');const nav=btn.dataset.nav;const target=nav==='missions'?'missionPanel':nav==='fleet'?'basePanel':nav==='research'?'polkadotGuidePanel':'basePanel';$(target).scrollIntoView({behavior:'smooth',block:'start'});if(nav==='research')toast('🌌 <strong>Технологии и обучение</strong> — открой маршрут знакомства с Polkadot ниже.');if(nav==='fleet')toast('⛏ <strong>Добыча</strong> — добывай ресурсы и улучшай оборудование.');}));
+  $('resetBtn').addEventListener('click',()=>{if(!confirm('Сбросить весь локальный прогресс Polka Frontier?'))return;localStorage.removeItem(SAVE_KEY);LEGACY_SAVE_KEYS.forEach(k=>localStorage.removeItem(k));location.reload();});
+  document.querySelectorAll('[data-nav]').forEach(btn=>btn.addEventListener('click',()=>{document.querySelectorAll('[data-nav]').forEach(b=>b.classList.remove('active'));btn.classList.add('active');const nav=btn.dataset.nav;const target=nav==='missions'?'missionPanel':nav==='fleet'?'basePanel':nav==='research'?'polkadotGuidePanel':nav==='expansion'?'expansionPanel':'basePanel';$(target).scrollIntoView({behavior:'smooth',block:'start'});if(nav==='research')toast('🌌 <strong>Технологии и обучение</strong> — открой маршрут знакомства с Polkadot ниже.');if(nav==='fleet')toast('⛏ <strong>Добыча</strong> — добывай ресурсы и улучшай оборудование.');if(nav==='expansion')toast('🏗️ <strong>Развитие базы</strong> — улучшай энергосеть, сканер и открывай достижения.');}));
   const CHAIN_ID='0x'+(420420417).toString(16);
   const chainParams={chainId:CHAIN_ID,chainName:'Polkadot Hub TestNet',nativeCurrency:{name:'Paseo',symbol:'PAS',decimals:18},rpcUrls:['https://services.polkadothub-rpc.com/testnet/'],blockExplorerUrls:['https://blockscout-testnet.polkadot.io/']};
   async function connectWallet(){
@@ -172,7 +229,7 @@
   $('walletBtn').addEventListener('click',connectWallet);
   if(window.ethereum){window.ethereum.on?.('accountsChanged',accounts=>{if(accounts&&accounts.length){walletAddress=accounts[0];$('walletBtn').textContent=walletAddress.slice(0,6)+'…'+walletAddress.slice(-4);$('walletBtn').classList.add('connected');}else{walletAddress=null;$('walletBtn').textContent='Подключить кошелёк ↗';$('walletBtn').classList.remove('connected');}});}
   load();
-  let last=Date.now();setInterval(()=>{const now=Date.now();const elapsed=now-last;last=now;const delta=Math.min(5,elapsed/3000);if(state.energy<100)state.energy=clamp(state.energy+delta,0,100);
+  let last=Date.now();setInterval(()=>{const now=Date.now();const elapsed=now-last;last=now;const regenMultiplier=1+state.generator*0.5;const delta=Math.min(5,elapsed/3000*regenMultiplier);if(state.energy<100)state.energy=clamp(state.energy+delta,0,100);
     if(state.drone){state._droneProgress=(state._droneProgress||0)+elapsed;if(state._droneProgress>=5000){const cycles=Math.floor(state._droneProgress/5000);state._droneProgress%=5000;state.crystals+=cycles*2*state.drone;state.alloy+=Math.floor(cycles/3)*state.drone;}}
     render();save();},1000);
   render();
