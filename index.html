@@ -1,10 +1,10 @@
 <!doctype html>
 <html lang="ru">
-<!-- Polka Frontier v0.5: browser-only game; game items are fictional local data, not crypto assets. -->
+<!-- Polka Frontier v0.6: browser-only game; game items are fictional local data, not crypto assets. -->
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Polka Frontier — Prototype v0.5</title>
+<title>Polka Frontier — Prototype v0.6</title>
 <style>
   :root{--bg:#090d18;--panel:#11182a;--panel2:#151f35;--line:#24324e;--text:#edf3ff;--muted:#8d9bb7;--cyan:#5de7dc;--violet:#a78bfa;--gold:#f8c76a;--green:#89f0a5;--red:#ff8799}
   *{box-sizing:border-box} html{background:var(--bg)} body{margin:0;color:var(--text);font:15px/1.45 Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:radial-gradient(ellipse at 75% -10%,#182e54 0%,transparent 45%),radial-gradient(ellipse at 0% 45%,#171338 0%,transparent 36%),var(--bg);min-height:100vh}
@@ -20,6 +20,9 @@
   @keyframes float{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-8px) rotate(3deg)}}
   .under-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:15px}.upgrade{padding:16px;border:1px solid var(--line);border-radius:14px;background:rgba(17,25,43,.83)}.upgrade-top{display:flex;align-items:center;gap:11px}.upgrade-icon{height:42px;width:42px;border-radius:12px;background:#23314c;display:grid;place-items:center;font-size:21px}.upgrade h3{font-size:12px;margin:0 0 3px}.upgrade .mini{font-size:10px;color:var(--muted)}.upgrade p{font-size:11px;line-height:1.5;color:#a3b0c9;min-height:34px;margin:13px 0}.upgrade-foot{display:flex;align-items:center;justify-content:space-between;gap:8px}.cost{font-size:10px;color:var(--gold)}.buy{background:#253b53;color:#c5fff5;border:1px solid #35596e;padding:8px 10px;border-radius:8px;font-size:10px;font-weight:800;white-space:nowrap}.buy:disabled{background:#1b2437;border-color:#29334a}
   .right-stack{display:grid;gap:16px}.mission{padding:17px 19px}.mission-row{display:flex;gap:12px;align-items:flex-start}.mission-icon{width:40px;height:40px;border-radius:12px;background:#2b234c;display:grid;place-items:center;font-size:19px;flex:none}.mission-name{font-weight:750;font-size:12px}.mission-desc{font-size:10px;color:var(--muted);margin-top:4px}.progress-track{height:5px;border-radius:99px;background:#263149;overflow:hidden;margin-top:12px}.progress-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--violet),var(--cyan));width:0%;transition:width .3s}.mission-bottom{display:flex;justify-content:space-between;gap:8px;align-items:center;margin-top:9px;font-size:10px;color:#95a5c1}.claim{background:#3c3262;color:#ded4ff;padding:7px 9px;border-radius:8px;font-size:10px;font-weight:800}.feed{padding:4px 19px 12px}.feed-item{display:flex;align-items:flex-start;gap:11px;padding:12px 0;border-bottom:1px solid #202a40}.feed-item:last-child{border-bottom:0}.feed-icon{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;background:#1d3040;flex:none}.feed-text{font-size:11px;color:#d7e1f4}.feed-time{font-size:9px;color:#6c7d99;margin-top:4px}.empty{font-size:11px;color:var(--muted);padding:17px 0}.footer-note{display:flex;justify-content:space-between;gap:12px;margin-top:18px;color:#61718e;font-size:10px;flex-wrap:wrap}.toast{position:fixed;right:24px;bottom:24px;background:#17243a;border:1px solid #425878;color:#e8f3ff;padding:13px 16px;border-radius:12px;box-shadow:0 15px 40px #0008;max-width:min(360px,calc(100vw - 32px));z-index:10;animation:pop .2s ease}.toast strong{color:var(--cyan)}@keyframes pop{from{transform:translateY(10px);opacity:0}to{transform:translateY(0);opacity:1}}
+
+
+  .expedition-panel{margin-top:18px}.expedition-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;padding:15px}.expedition-location{border:1px solid #293753;background:rgba(13,20,35,.82);border-radius:14px;padding:15px;display:flex;flex-direction:column;min-width:0;transition:border-color .15s,background .15s}.expedition-location.selected{border-color:#5de7dc;background:linear-gradient(160deg,rgba(26,62,70,.7),rgba(13,20,35,.9));box-shadow:inset 0 0 0 1px #5de7dc28}.expedition-location.locked{opacity:.66}.expedition-location-top{display:flex;align-items:center;gap:10px}.expedition-place-icon{width:43px;height:43px;border-radius:12px;background:#26334f;display:grid;place-items:center;font-size:21px;flex:none}.expedition-place-name{font-size:12px;font-weight:850}.expedition-place-sub{font-size:9px;letter-spacing:.1em;color:#90a2c0;margin-top:3px}.expedition-location p{font-size:11px;line-height:1.55;color:#aab7cf;min-height:50px;margin:12px 0}.expedition-meta{display:grid;gap:6px;margin-top:auto;font-size:10px;color:#a8b7d0}.expedition-select{margin-top:13px;background:#253b53;border:1px solid #35596e;color:#c5fff5;border-radius:8px;padding:10px;font-size:10px;font-weight:850}.expedition-location.selected .expedition-select{background:#164047;border-color:#2b6967;color:#c8fff7}.expedition-control{padding:0 15px 15px;display:grid;grid-template-columns:1.1fr 1fr;gap:12px}.expedition-control-box{border:1px solid #293753;background:rgba(13,20,35,.72);border-radius:13px;padding:15px;min-width:0}.expedition-control-title{font-size:11px;font-weight:850;margin-bottom:11px}.approach-options{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}.approach-btn{padding:10px 7px;border-radius:9px;border:1px solid #293753;background:#121b2d;color:#aebbd3;font-size:10px;font-weight:800}.approach-btn.selected{background:#2d2850;border-color:#7966bb;color:#ece5ff}.expedition-forecast{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.forecast-cell{background:#18233a;border-radius:9px;padding:10px}.forecast-label{font-size:9px;color:#8495b3}.forecast-value{font-size:12px;font-weight:850;margin-top:4px}.expedition-launch-row{padding:0 15px 15px;display:flex;align-items:center;gap:12px;justify-content:space-between;flex-wrap:wrap}.expedition-launch{background:linear-gradient(100deg,#5de7dc,#80f3d2);color:#08202b;padding:12px 17px;border-radius:10px;font-weight:900;font-size:11px}.expedition-hint{font-size:10px;line-height:1.5;color:#94a5c2;flex:1;min-width:180px}.expedition-summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;padding:15px;border-top:1px solid #202c45}.expedition-summary-cell{background:#151f32;border:1px solid #293753;border-radius:11px;padding:12px}.expedition-summary-num{font-size:18px;font-weight:900}.expedition-summary-label{font-size:9px;color:#91a4c3;margin-top:3px}.expedition-history{padding:0 15px 15px}.expedition-history-title{font-size:11px;font-weight:850;padding:3px 0 10px}.expedition-history-item{display:flex;align-items:flex-start;gap:10px;padding:11px 0;border-top:1px solid #202a40}.expedition-history-icon{width:30px;height:30px;border-radius:9px;background:#1d3040;display:grid;place-items:center;flex:none}.expedition-history-main{flex:1;min-width:0}.expedition-history-name{font-size:11px;font-weight:800}.expedition-history-desc{font-size:10px;line-height:1.45;color:#9eacc4;margin-top:3px}.expedition-history-reward{font-size:10px;color:#83ecd8;margin-top:4px}.expedition-empty{font-size:10px;color:#7f90ad;padding:10px 0}
 
   .base-expansion{margin-top:18px}.expansion-intro{padding:19px 20px;border-bottom:1px solid #202c45;background:linear-gradient(120deg,rgba(35,49,80,.55),rgba(15,23,39,.22))}.expansion-intro h2{font-size:18px;margin:4px 0 5px;letter-spacing:-.025em}.expansion-intro p{font-size:11px;color:#a4b2cb;line-height:1.6;margin:0;max-width:800px}.module-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;padding:15px}.module-card{padding:16px;border:1px solid #263552;border-radius:13px;background:rgba(13,20,35,.8)}.module-head{display:flex;align-items:center;gap:11px}.module-icon{width:43px;height:43px;border-radius:12px;background:#26334f;display:grid;place-items:center;font-size:21px;flex:none}.module-title{font-size:12px;font-weight:800}.module-level{font-size:10px;color:var(--muted);margin-top:3px}.module-card p{font-size:11px;line-height:1.55;color:#aab7cf;margin:13px 0;min-height:34px}.module-foot{display:flex;align-items:center;justify-content:space-between;gap:10px}.module-cost{font-size:10px;color:var(--gold)}.module-button{background:#223b51;border:1px solid #355c70;color:#d6fff8;border-radius:8px;padding:9px 10px;font-size:10px;font-weight:800;white-space:nowrap}.module-button:disabled{opacity:.4;cursor:not-allowed}.section-subhead{padding:4px 20px 0;font-size:10px;letter-spacing:.13em;color:#8192b1;font-weight:800}.achievement-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;padding:13px 15px 17px}.achievement-card{border:1px solid #283650;background:rgba(13,20,35,.72);border-radius:12px;padding:13px;min-width:0}.achievement-top{display:flex;align-items:center;gap:9px}.achievement-icon{width:35px;height:35px;border-radius:10px;background:#26334f;display:grid;place-items:center;font-size:18px;flex:none}.achievement-name{font-size:11px;font-weight:800}.achievement-desc{font-size:10px;line-height:1.5;color:#a2b0c8;margin:10px 0;min-height:30px}.achievement-progress{font-size:9px;color:#8092b0;display:flex;justify-content:space-between;gap:6px}.achievement-track{height:4px;background:#273149;border-radius:99px;overflow:hidden;margin-top:7px}.achievement-fill{height:100%;background:linear-gradient(90deg,var(--violet),var(--cyan));border-radius:99px}.achievement-foot{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:11px}.achievement-reward{font-size:9px;color:var(--gold)}.achievement-claim{background:#3c3262;color:#ded4ff;padding:7px 9px;border-radius:8px;font-size:9px;font-weight:800;white-space:nowrap}.achievement-claim:disabled{opacity:.45;cursor:not-allowed}.achievement-card.claimed{border-color:#2d675f}.achievement-card.claimed .achievement-icon{background:#1c423e}.achievement-summary{margin:0 15px 15px;padding:10px 12px;border:1px solid #29344a;background:#151c2a;border-radius:10px;color:#a8b7cf;font-size:10px}
   @media(max-width:1050px){.achievement-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
@@ -38,7 +41,7 @@
 
   .research-panel,.weekly-panel{margin-top:18px}.feature-intro{padding:19px 20px;border-bottom:1px solid #202c45;background:linear-gradient(120deg,rgba(35,49,80,.58),rgba(15,23,39,.22))}.feature-intro h2{font-size:18px;margin:4px 0 5px;letter-spacing:-.025em}.feature-intro p{font-size:11px;color:#a4b2cb;line-height:1.6;margin:0;max-width:840px}.research-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;padding:15px}.research-card{border:1px solid #293753;background:rgba(13,20,35,.82);border-radius:14px;padding:16px;min-width:0}.research-top{display:flex;align-items:center;gap:10px}.research-icon{width:43px;height:43px;display:grid;place-items:center;border-radius:12px;background:#26334f;font-size:21px;flex:none}.research-name{font-size:12px;font-weight:850}.research-level{font-size:10px;color:#91a4c3;margin-top:3px}.research-card p{font-size:11px;line-height:1.55;color:#aab7cf;min-height:52px;margin:13px 0}.research-effect{border:1px solid #26334a;border-radius:9px;padding:9px 10px;background:#151f32;color:#a9c2d9;font-size:10px;min-height:35px}.research-foot{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:12px}.research-cost{font-size:10px;color:var(--gold)}.research-buy{background:#253b53;border:1px solid #35596e;color:#c5fff5;border-radius:8px;padding:9px 10px;font-size:10px;font-weight:850;white-space:nowrap}.research-buy:disabled{opacity:.42;cursor:not-allowed}.research-bottom{margin:0 15px 16px;border:1px solid #293753;background:rgba(17,25,43,.86);border-radius:12px;padding:13px 15px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}.research-bottom strong{font-size:11px}.research-bottom p{font-size:10px;line-height:1.5;color:#9eacc4;margin:4px 0 0}.weekly-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;padding:15px}.weekly-objective{border:1px solid #293753;background:rgba(13,20,35,.82);border-radius:12px;padding:15px}.weekly-objective-top{display:flex;align-items:center;gap:10px}.weekly-objective-icon{width:38px;height:38px;display:grid;place-items:center;background:#26334f;border-radius:10px;font-size:19px}.weekly-objective-name{font-size:12px;font-weight:800}.weekly-objective-desc{font-size:10px;color:#aab7cf;margin-top:3px}.weekly-progress-label{display:flex;justify-content:space-between;gap:8px;font-size:10px;color:#91a4c3;margin-top:14px}.weekly-track{height:6px;background:#263149;border-radius:99px;overflow:hidden;margin-top:7px}.weekly-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--violet),var(--cyan));border-radius:99px;transition:width .25s}.weekly-footer{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:14px 17px;border-top:1px solid #202c45;background:rgba(19,29,48,.55);flex-wrap:wrap}.weekly-status{font-size:10px;color:#9eacc4;line-height:1.55}.weekly-claim{background:#3c3262;color:#ded4ff;padding:10px 12px;border-radius:9px;font-size:10px;font-weight:850}.weekly-note{margin:0 15px 15px;color:#7e90ad;font-size:10px;line-height:1.55}.relic-trade{background:#302952;border:1px solid #504479;color:#e4dbff;border-radius:8px;padding:9px 11px;font-size:10px;font-weight:850;white-space:nowrap}.relic-trade:disabled{opacity:.4;cursor:not-allowed}
   @media(max-width:1250px){.stats{grid-template-columns:repeat(3,minmax(0,1fr))}.research-grid{grid-template-columns:1fr 1fr}}
-  @media(max-width:850px){.research-grid{grid-template-columns:1fr}.research-card p{min-height:0}}
+  @media(max-width:850px){.research-grid{grid-template-columns:1fr}.research-card p{min-height:0}.expedition-grid{grid-template-columns:1fr}.expedition-location p{min-height:0}.expedition-control{grid-template-columns:1fr}.expedition-summary{grid-template-columns:repeat(2,minmax(0,1fr))}}
   @media(max-width:650px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.weekly-grid{grid-template-columns:1fr}.research-grid{padding:12px}.research-bottom{align-items:flex-start}.weekly-footer{align-items:stretch;flex-direction:column}}
 
 </style>
@@ -47,8 +50,8 @@
 <div class="app">
   <aside>
     <div class="brand"><div class="logo">P</div><div><div class="brand-name">POLKA FRONTIER</div><div class="brand-sub">WEB3 EXPLORATION</div></div></div>
-    <div class="nav-wrap"><div class="nav-label">КОМАНДНЫЙ ЦЕНТР</div><nav class="nav"><button class="active" data-nav="base"><span class="ico">◈</span>Моя база</button><button data-nav="fleet"><span class="ico">⛏</span>Добыча</button><button data-nav="research"><span class="ico">⌘</span>Исследования</button><button data-nav="missions"><span class="ico">✧</span>Задания</button><button data-nav="weekly"><span class="ico">▦</span>Контракты</button><button data-nav="expansion"><span class="ico">⌂</span>Развитие базы</button><button data-nav="sectors"><span class="ico">⌖</span>Карта секторов</button><button data-nav="polkadot"><span class="ico">●</span>О Polkadot</button></nav></div>
-    <div class="aside-bottom"><div class="status-card"><div class="status-top"><span><i class="dot"></i>СИСТЕМЫ В НОРМЕ</span><span>v0.5</span></div><div class="status-title">Аванпост «Искра»</div><div class="status-copy" id="sidebarSectorCopy">Сектор 07 · Неизведанный рубеж</div></div></div>
+    <div class="nav-wrap"><div class="nav-label">КОМАНДНЫЙ ЦЕНТР</div><nav class="nav"><button class="active" data-nav="base"><span class="ico">◈</span>Моя база</button><button data-nav="fleet"><span class="ico">⛏</span>Добыча</button><button data-nav="research"><span class="ico">⌘</span>Исследования</button><button data-nav="missions"><span class="ico">✧</span>Задания</button><button data-nav="expeditions"><span class="ico">🛰</span>Экспедиции</button><button data-nav="weekly"><span class="ico">▦</span>Контракты</button><button data-nav="expansion"><span class="ico">⌂</span>Развитие базы</button><button data-nav="sectors"><span class="ico">⌖</span>Карта секторов</button><button data-nav="polkadot"><span class="ico">●</span>О Polkadot</button></nav></div>
+    <div class="aside-bottom"><div class="status-card"><div class="status-top"><span><i class="dot"></i>СИСТЕМЫ В НОРМЕ</span><span>v0.6</span></div><div class="status-title">Аванпост «Искра»</div><div class="status-copy" id="sidebarSectorCopy">Сектор 07 · Неизведанный рубеж</div></div></div>
   </aside>
   <main>
     <header class="topbar"><div><div class="eyebrow" id="sectorEyebrow">СЕКТОР 07 / НЕИЗВЕДАННЫЙ РУБЕЖ</div><h1 class="page-title">Командный центр</h1></div><div class="top-right"><div class="network-pill"><b>●</b> DEMO MODE · БЕЗ ТРАНЗАКЦИЙ</div><button class="wallet" id="walletBtn" title="Необязательно. Подключение не отправляет игровых транзакций.">Подключить кошелёк ↗</button></div></header>
@@ -79,7 +82,7 @@
 
     <section class="panel base-expansion" id="expansionPanel" aria-labelledby="expansionTitle">
       <div class="expansion-intro">
-        <div class="eyebrow">ИНЖЕНЕРНЫЙ ОТСЕК · ВЕРСИЯ 0.5</div>
+        <div class="eyebrow">ИНЖЕНЕРНЫЙ ОТСЕК · ВЕРСИЯ 0.6</div>
         <h2 id="expansionTitle">Развивай инфраструктуру аванпоста</h2>
         <p>Построй энергомодуль для более быстрого восстановления энергии и сканер для улучшения разведки. Прогресс и награды остаются игровыми данными в этом браузере.</p>
       </div>
@@ -102,7 +105,7 @@
 
 
     <section class="panel research-panel" id="researchLabPanel" aria-labelledby="researchLabTitle">
-      <div class="feature-intro"><div class="eyebrow">НАУЧНЫЙ ОТСЕК · ВЕРСИЯ 0.5</div><h2 id="researchLabTitle">Дерево исследований</h2><p>Вкладывай игровые ресурсы в технологии, чтобы улучшать добычу, находить редкости и экономить энергию. Улучшения постоянные и сохраняются в этом браузере; это не ставки и не токены.</p></div>
+      <div class="feature-intro"><div class="eyebrow">НАУЧНЫЙ ОТСЕК · ВЕРСИЯ 0.6</div><h2 id="researchLabTitle">Дерево исследований</h2><p>Вкладывай игровые ресурсы в технологии, чтобы улучшать добычу, находить редкости и экономить энергию. Улучшения постоянные и сохраняются в этом браузере; это не ставки и не токены.</p></div>
       <div class="research-grid">
         <article class="research-card"><div class="research-top"><div class="research-icon">⛏️</div><div><div class="research-name">Стабилизатор бурения</div><div class="research-level" id="techGeologyLevel">Уровень 0 / 3</div></div></div><p>Настройка головки бура позволяет получать больше минералов. Улучшение повышает базовую добычу кристаллов и плазмы на +1 за уровень.</p><div class="research-effect" id="techGeologyEffect">Эффект: +0 к базовой добыче</div><div class="research-foot"><span class="research-cost" id="techGeologyCost">💎 40 · 🔩 3</span><button class="research-buy" id="techGeologyBtn">ИССЛЕДОВАТЬ</button></div></article>
         <article class="research-card"><div class="research-top"><div class="research-icon">🔎</div><div><div class="research-name">Спектральный анализ</div><div class="research-level" id="techSurveyLevel">Уровень 0 / 3</div></div></div><p>Изучение необычных сигналов повышает награды разведки и вероятность найти древний артефакт во время добычи или экспедиции.</p><div class="research-effect" id="techSurveyEffect">Эффект: базовый шанс находок</div><div class="research-foot"><span class="research-cost" id="techSurveyCost">💎 55 · 🔩 4</span><button class="research-buy" id="techSurveyBtn">ИССЛЕДОВАТЬ</button></div></article>
@@ -112,7 +115,7 @@
     </section>
 
     <section class="panel weekly-panel" id="weeklyPanel" aria-labelledby="weeklyTitle">
-      <div class="feature-intro"><div class="eyebrow">КОНТРАКТЫ РУБЕЖА · ВЕРСИЯ 0.5</div><h2 id="weeklyTitle">Еженедельное испытание</h2><p>Выполни задачи до смены недельного цикла, чтобы получить игровую награду. Прогресс локальный; его нельзя обменять на DOT или другие активы.</p></div>
+      <div class="feature-intro"><div class="eyebrow">КОНТРАКТЫ РУБЕЖА · ВЕРСИЯ 0.6</div><h2 id="weeklyTitle">Еженедельное испытание</h2><p>Выполни задачи до смены недельного цикла, чтобы получить игровую награду. Прогресс локальный; его нельзя обменять на DOT или другие активы.</p></div>
       <div class="weekly-grid">
         <article class="weekly-objective"><div class="weekly-objective-top"><div class="weekly-objective-icon">⛏️</div><div><div class="weekly-objective-name">Стабильная добыча</div><div class="weekly-objective-desc">Выполни 20 ручных добыч в любом открытом секторе.</div></div></div><div class="weekly-progress-label"><span id="weeklyMineCount">0 / 20 добыч</span><span id="weeklyMinePct">0%</span></div><div class="weekly-track"><div class="weekly-fill" id="weeklyMineFill"></div></div></article>
         <article class="weekly-objective"><div class="weekly-objective-top"><div class="weekly-objective-icon">🛰️</div><div><div class="weekly-objective-name">Картография рубежа</div><div class="weekly-objective-desc">Заверши 5 разведывательных экспедиций.</div></div></div><div class="weekly-progress-label"><span id="weeklyExploreCount">0 / 5 экспедиций</span><span id="weeklyExplorePct">0%</span></div><div class="weekly-track"><div class="weekly-fill" id="weeklyExploreFill"></div></div></article>
@@ -121,8 +124,46 @@
       <div class="weekly-note">Новый недельный цикл начинается автоматически по локальной календарной неделе. Это прототип: прогресс и награды доступны только в этом браузере, без сервера и блокчейна.</div>
     </section>
 
+
+    <section class="panel expedition-panel" id="expeditionPanel" aria-labelledby="expeditionTitle">
+      <div class="feature-intro"><div class="eyebrow">ДАЛЬНИЙ РУБЕЖ · ВЕРСИЯ 0.6</div><h2 id="expeditionTitle">Экспедиционный корпус</h2><p>Выбирай направление и подход к миссии. Чем выше риск, тем ценнее возможная добыча, но вероятность неудачи тоже растёт. Экспедиции тратят энергию и дают только внутриигровые ресурсы.</p></div>
+      <div class="expedition-grid">
+        <article class="expedition-location selected" id="expOrbitCard">
+          <div class="expedition-location-top"><div class="expedition-place-icon">🛰️</div><div><div class="expedition-place-name">Старый орбитальный док</div><div class="expedition-place-sub">НИЗКИЙ РИСК · СЕКТОР 07</div></div></div>
+          <p>Заброшенные грузовые отсеки с небольшими запасами минералов. Подходит для коротких вылазок и стабильного пополнения ресурсов.</p>
+          <div class="expedition-meta"><span>Награда: 💎 кристаллы · 🔩 сплав</span><span id="expOrbitStatus">Доступно всем исследователям</span></div>
+          <button class="expedition-select" id="expSelectOrbit">ВЫБРАТЬ ДОК</button>
+        </article>
+        <article class="expedition-location" id="expCanyonCard">
+          <div class="expedition-location-top"><div class="expedition-place-icon">🏜️</div><div><div class="expedition-place-name">Пепельный каньон</div><div class="expedition-place-sub">СРЕДНИЙ РИСК · РУБЕЖ 07</div></div></div>
+          <p>Минеральный каньон с нестабильными геотермальными карманами. Требуется база уровня 2 или установленный сканер.</p>
+          <div class="expedition-meta"><span>Награда: больше 💎 и 🔩</span><span id="expCanyonStatus">🔒 Уровень базы 2 или сканер 1</span></div>
+          <button class="expedition-select" id="expSelectCanyon">ВЫБРАТЬ КАНЬОН</button>
+        </article>
+        <article class="expedition-location" id="expEchoCard">
+          <div class="expedition-location-top"><div class="expedition-place-icon">🪐</div><div><div class="expedition-place-name">Плазменный разлом</div><div class="expedition-place-sub">ВЫСОКИЙ РИСК · ЭХО-9</div></div></div>
+          <p>Опасная экспедиция в сектор 08: нестабильная плазма, кристаллы и обломки старых аппаратов. Откроется после освоения Эхо-9.</p>
+          <div class="expedition-meta"><span>Награда: 🧪 плазма · 💎 · 🔩</span><span id="expEchoStatus">🔒 Сначала открой сектор 08</span></div>
+          <button class="expedition-select" id="expSelectEcho">ВЫБРАТЬ РАЗЛОМ</button>
+        </article>
+      </div>
+      <div class="expedition-control">
+        <div class="expedition-control-box"><div class="expedition-control-title">ТАКТИКА ЭКСПЕДИЦИИ</div><div class="approach-options"><button class="approach-btn" id="approachCautious">Осторожно</button><button class="approach-btn selected" id="approachStandard">Стандарт</button><button class="approach-btn" id="approachRisky">Рискованно</button></div><p id="expeditionApproachDesc" style="font-size:10px;line-height:1.5;color:#9eacc4;margin:11px 0 0">Сбалансированный подход: обычные шансы и награды.</p></div>
+        <div class="expedition-control-box"><div class="expedition-control-title">ПРОГНОЗ МИССИИ</div><div class="expedition-forecast"><div class="forecast-cell"><div class="forecast-label">Успех</div><div class="forecast-value" id="expeditionChance">90%</div></div><div class="forecast-cell"><div class="forecast-label">Расход энергии</div><div class="forecast-value" id="expeditionCost">⚡ 12</div></div><div class="forecast-cell"><div class="forecast-label">Множитель награды</div><div class="forecast-value" id="expeditionMultiplier">×1.0</div></div></div><p id="expeditionRewardHint" style="font-size:10px;line-height:1.5;color:#9eacc4;margin:11px 0 0">Ожидаемая добыча: кристаллы и сплав.</p></div>
+      </div>
+      <div class="expedition-launch-row"><button class="expedition-launch" id="launchExpeditionBtn">🚀 ОТПРАВИТЬ ЭКСПЕДИЦИЮ</button><div class="expedition-hint" id="expeditionLaunchHint">Результат определяется в момент запуска. Успех не гарантирован; при неудаче потраченная энергия не возвращается.</div></div>
+      <div class="expedition-summary">
+        <div class="expedition-summary-cell"><div class="expedition-summary-num" id="expRuns">0</div><div class="expedition-summary-label">Всего экспедиций</div></div>
+        <div class="expedition-summary-cell"><div class="expedition-summary-num" id="expWins">0</div><div class="expedition-summary-label">Успешных миссий</div></div>
+        <div class="expedition-summary-cell"><div class="expedition-summary-num" id="expWinRate">—</div><div class="expedition-summary-label">Доля успеха</div></div>
+        <div class="expedition-summary-cell"><div class="expedition-summary-num" id="expRelics">0</div><div class="expedition-summary-label">Артефакты найдено в экспедициях</div></div>
+      </div>
+      <div class="expedition-history"><div class="expedition-history-title">ЖУРНАЛ ДАЛЬНИХ МИССИЙ</div><div id="expeditionHistory"><div class="expedition-empty">Экспедиции ещё не проводились. Выбери направление и отправь первый отряд.</div></div></div>
+      <div class="weekly-note">Тактика влияет на риск и размер награды. Экспедиции учитываются в прогрессе еженедельного контракта. Эти результаты локальны, не подтверждаются сервером и не связаны с DOT или другими криптоактивами.</div>
+    </section>
+
     <section class="panel sector-panel" id="sectorPanel" aria-labelledby="sectorTitle">
-      <div class="sector-intro"><div class="eyebrow">КАРТА РУБЕЖА · ВЕРСИЯ 0.5</div><h2 id="sectorTitle">Открывай новые территории</h2><p>Сектор 07 даёт кристаллы и сплав. После развития базы до уровня 3 можно открыть сектор 08 — там добывается плазма для нового инженерного модуля. Это виртуальные ресурсы только внутри игры.</p></div>
+      <div class="sector-intro"><div class="eyebrow">КАРТА РУБЕЖА · ВЕРСИЯ 0.6</div><h2 id="sectorTitle">Открывай новые территории</h2><p>Сектор 07 даёт кристаллы и сплав. После развития базы до уровня 3 можно открыть сектор 08 — там добывается плазма для нового инженерного модуля. Это виртуальные ресурсы только внутри игры.</p></div>
       <div class="sector-grid">
         <article class="sector-card active" id="sector07Card">
           <div class="sector-card-top"><div class="sector-art">💠</div><div><div class="sector-name">Сектор 07 · Искра</div><div class="sector-meta">СТАРТОВАЯ ТЕРРИТОРИЯ</div></div></div>
@@ -147,7 +188,7 @@
     <section class="panel onboarding" id="polkadotGuidePanel" aria-labelledby="guideTitle">
       <div class="onboarding-intro">
         <div>
-          <div class="eyebrow">МАРШРУТ ИССЛЕДОВАТЕЛЯ · ВЕРСИЯ 0.5</div>
+          <div class="eyebrow">МАРШРУТ ИССЛЕДОВАТЕЛЯ · ВЕРСИЯ 0.6</div>
           <h2 id="guideTitle">Освой базу — познакомься с Polkadot</h2>
           <p>Выполняй игровые задания, открывай официальные материалы и узнавай, как устроена экосистема. Подключать кошелёк необязательно. Все награды ниже — только внутриигровые очки и ресурсы.</p>
         </div>
@@ -183,15 +224,15 @@
       <div class="local-disclaimer">Важно: добываемые здесь кристаллы и сплавы — игровые данные, а не DOT или другие токены. Прогресс хранится локально в браузере, пока не подключён к серверу или блокчейну. Кнопка подключения кошелька не отправляет игровые транзакции. Игра пока не связана с контрактом Polkadot. Никогда не вводи seed-фразу или приватный ключ на сайте игры.</div>
       <div class="daily-strip"><div class="daily-copy"><strong>📡 Ежедневный сигнал</strong><span id="dailySignalText">Забери небольшой внутриигровой бонус сегодня.</span></div><button class="learn-btn secondary" id="dailySignalBtn">Получить +5 💎</button></div>
     </section>
-    <div class="footer-note"><span>POLKA FRONTIER · ИГРОВОЙ ПРОТОТИП v0.5</span><span>Прогресс хранится в этом браузере · игровые ресурсы не являются токенами</span><button id="resetBtn" style="background:transparent;color:#72819b;text-decoration:underline;font-size:10px;padding:0">Сбросить прогресс</button></div>
+    <div class="footer-note"><span>POLKA FRONTIER · ИГРОВОЙ ПРОТОТИП v0.6</span><span>Прогресс хранится в этом браузере · игровые ресурсы не являются токенами</span><button id="resetBtn" style="background:transparent;color:#72819b;text-decoration:underline;font-size:10px;padding:0">Сбросить прогресс</button></div>
   </main>
 </div>
 <div id="toastRoot" aria-live="polite"></div>
 <script>
 (() => {
-  const SAVE_KEY = 'polka-frontier-save-v5';
-  const LEGACY_SAVE_KEYS = ['polka-frontier-save-v4','polka-frontier-save-v3','polka-frontier-save-v2','polka-frontier-save-v1'];
-  const state = { crystals:45, energy:100, alloy:8, plasma:0, relics:0, relicsFound:0, level:1, xp:0, drill:1, drone:0, mines:0, crystalMines:0, explores:0, generator:0, scanner:0, techGeology:0, techSurvey:0, techEfficiency:0, sector08Unlocked:false, activeSector:'07', sector08Mines:0, plasmaCore:0, achievements:{}, questClaimed:false, introMineClaimed:false, introDrillClaimed:false, introPolkadotClaimed:false, guideOpened:false, dailySignalDate:'', weeklyChallengeKey:'', weeklyMines:0, weeklyExplores:0, weeklyClaimed:false, lastTick:Date.now(), feed:[] };
+  const SAVE_KEY = 'polka-frontier-save-v6';
+  const LEGACY_SAVE_KEYS = ['polka-frontier-save-v5','polka-frontier-save-v4','polka-frontier-save-v3','polka-frontier-save-v2','polka-frontier-save-v1'];
+  const state = { crystals:45, energy:100, alloy:8, plasma:0, relics:0, relicsFound:0, level:1, xp:0, drill:1, drone:0, mines:0, crystalMines:0, explores:0, generator:0, scanner:0, techGeology:0, techSurvey:0, techEfficiency:0, sector08Unlocked:false, activeSector:'07', sector08Mines:0, plasmaCore:0, achievements:{}, questClaimed:false, introMineClaimed:false, introDrillClaimed:false, introPolkadotClaimed:false, guideOpened:false, dailySignalDate:'', weeklyChallengeKey:'', weeklyMines:0, weeklyExplores:0, weeklyClaimed:false, expeditionLocation:'orbit', expeditionApproach:'standard', expeditionRuns:0, expeditionWins:0, expeditionLosses:0, expeditionRelics:0, expeditionHistory:[], lastTick:Date.now(), feed:[] };
   let walletAddress = null;
   const $ = id => document.getElementById(id);
   const fmt = n => Math.floor(n).toLocaleString('ru-RU');
@@ -205,7 +246,7 @@
       if(saved && typeof saved==='object'){
         Object.keys(state).forEach(key=>{ if(Object.prototype.hasOwnProperty.call(saved,key)) state[key]=saved[key]; });
         ['crystals','energy','alloy','plasma','relics','relicsFound','level','xp','drill','drone','mines','crystalMines','explores','generator','scanner','techGeology','techSurvey','techEfficiency','sector08Mines','plasmaCore','weeklyMines','weeklyExplores'].forEach(key=>{ const n=Number(state[key]); state[key]=Number.isFinite(n)?Math.max(0,n):0; });
-        state.energy=clamp(state.energy,0,100); state.level=Math.max(1,Math.floor(state.level)); state.drill=Math.max(1,Math.floor(state.drill)); state.drone=Math.floor(state.drone); state.mines=Math.floor(state.mines); state.explores=Math.floor(state.explores); state.generator=clamp(Math.floor(state.generator),0,3); state.scanner=clamp(Math.floor(state.scanner),0,3); state.techGeology=clamp(Math.floor(state.techGeology),0,3); state.techSurvey=clamp(Math.floor(state.techSurvey),0,3); state.techEfficiency=clamp(Math.floor(state.techEfficiency),0,2); state.relics=Math.floor(state.relics); state.relicsFound=Math.floor(state.relicsFound); state.crystalMines=Math.floor(state.crystalMines); if(!Object.prototype.hasOwnProperty.call(saved,'crystalMines')) state.crystalMines=state.mines; state.sector08Mines=Math.floor(state.sector08Mines); state.plasmaCore=clamp(Math.floor(state.plasmaCore),0,3); state.weeklyMines=Math.floor(state.weeklyMines); state.weeklyExplores=Math.floor(state.weeklyExplores); state.weeklyClaimed=!!state.weeklyClaimed; state.weeklyChallengeKey=typeof state.weeklyChallengeKey==='string'?state.weeklyChallengeKey:''; state.sector08Unlocked=!!state.sector08Unlocked; state.activeSector=state.activeSector==='08'&&state.sector08Unlocked?'08':'07';
+        state.energy=clamp(state.energy,0,100); state.level=Math.max(1,Math.floor(state.level)); state.drill=Math.max(1,Math.floor(state.drill)); state.drone=Math.floor(state.drone); state.mines=Math.floor(state.mines); state.explores=Math.floor(state.explores); state.generator=clamp(Math.floor(state.generator),0,3); state.scanner=clamp(Math.floor(state.scanner),0,3); state.techGeology=clamp(Math.floor(state.techGeology),0,3); state.techSurvey=clamp(Math.floor(state.techSurvey),0,3); state.techEfficiency=clamp(Math.floor(state.techEfficiency),0,2); state.relics=Math.floor(state.relics); state.relicsFound=Math.floor(state.relicsFound); state.crystalMines=Math.floor(state.crystalMines); if(!Object.prototype.hasOwnProperty.call(saved,'crystalMines')) state.crystalMines=state.mines; state.sector08Mines=Math.floor(state.sector08Mines); state.plasmaCore=clamp(Math.floor(state.plasmaCore),0,3); state.weeklyMines=Math.floor(state.weeklyMines); state.weeklyExplores=Math.floor(state.weeklyExplores); state.weeklyClaimed=!!state.weeklyClaimed; state.expeditionRuns=Math.floor(Number(state.expeditionRuns)||0); state.expeditionWins=Math.floor(Number(state.expeditionWins)||0); state.expeditionLosses=Math.floor(Number(state.expeditionLosses)||0); state.expeditionRelics=Math.floor(Number(state.expeditionRelics)||0); state.expeditionLocation=['orbit','canyon','echo'].includes(state.expeditionLocation)?state.expeditionLocation:'orbit'; state.expeditionApproach=['cautious','standard','risky'].includes(state.expeditionApproach)?state.expeditionApproach:'standard'; state.expeditionHistory=Array.isArray(state.expeditionHistory)?state.expeditionHistory.slice(0,5):[]; state.weeklyChallengeKey=typeof state.weeklyChallengeKey==='string'?state.weeklyChallengeKey:''; state.sector08Unlocked=!!state.sector08Unlocked; state.activeSector=state.activeSector==='08'&&state.sector08Unlocked?'08':'07';
         state.achievements=state.achievements&&typeof state.achievements==='object'&&!Array.isArray(state.achievements)?state.achievements:{};
         state.feed=Array.isArray(state.feed)?state.feed.slice(0,5):[]; state.lastTick=Date.now();
       }
@@ -313,6 +354,83 @@
     $('plasmaCoreBtn').disabled=!unlocked||core>=3||state.plasma<10*(core+1)||state.alloy<8*(core+1);
   }
 
+  const expeditionDefs = {
+    orbit:{name:'Старый орбитальный док',icon:'🛰️',baseChance:0.90,baseCost:12,unlock:()=>true,unlockText:'Доступно всем исследователям'},
+    canyon:{name:'Пепельный каньон',icon:'🏜️',baseChance:0.73,baseCost:18,unlock:()=>state.level>=2||state.scanner>=1,unlockText:'Требуется база 2-го уровня или сканер 1-го уровня'},
+    echo:{name:'Плазменный разлом',icon:'🪐',baseChance:0.62,baseCost:24,unlock:()=>state.sector08Unlocked,unlockText:'Сначала открой сектор 08 · Эхо-9'}
+  };
+  const approachDefs = {
+    cautious:{name:'Осторожно',chance:0.15,multiplier:0.78,desc:'Шанс успеха +15 п.п., награда ×0,78. Подходит, когда важна надёжность.'},
+    standard:{name:'Стандарт',chance:0,multiplier:1,desc:'Сбалансированный подход: обычные шансы и награды.'},
+    risky:{name:'Рискованно',chance:-0.16,multiplier:1.65,desc:'Шанс успеха −16 п.п., награда ×1,65 и выше шанс редкой находки.'}
+  };
+  function expeditionCost(key=state.expeditionLocation){return Math.max(6,expeditionDefs[key].baseCost-state.techEfficiency*2);}
+  function expeditionSuccessChance(key=state.expeditionLocation,approach=state.expeditionApproach){const d=expeditionDefs[key],a=approachDefs[approach];return clamp(d.baseChance+state.scanner*0.025+state.techSurvey*0.04+a.chance,0.2,0.97);}
+  function renderExpeditions(){
+    const key=state.expeditionLocation, approach=state.expeditionApproach, approachDef=approachDefs[approach]||approachDefs.standard;
+    const locations=[['orbit','expOrbitCard','expSelectOrbit','expOrbitStatus'],['canyon','expCanyonCard','expSelectCanyon','expCanyonStatus'],['echo','expEchoCard','expSelectEcho','expEchoStatus']];
+    locations.forEach(([k,cardId,btnId,statusId])=>{
+      const d=expeditionDefs[k],available=d.unlock(),selected=key===k;
+      $(cardId).classList.toggle('selected',selected);$(cardId).classList.toggle('locked',!available);
+      $(btnId).disabled=!available;$(btnId).textContent=selected?'ВЫБРАНО':available?({orbit:'ВЫБРАТЬ ДОК',canyon:'ВЫБРАТЬ КАНЬОН',echo:'ВЫБРАТЬ РАЗЛОМ'}[k]):'ЗАКРЫТО';
+      $(statusId).textContent=available?(selected?'✓ Выбрано направление':({orbit:'Доступно всем исследователям',canyon:'Открыто · база готова',echo:'Открыто · Эхо-9'}[k])):'🔒 '+d.unlockText;
+    });
+    ['cautious','standard','risky'].forEach(k=>$('approach'+k[0].toUpperCase()+k.slice(1)).classList.toggle('selected',approach===k));
+    $('expeditionApproachDesc').textContent=approachDef.desc;
+    const d=expeditionDefs[key],available=d.unlock(),cost=expeditionCost(key),chance=Math.round(expeditionSuccessChance(key,approach)*100);
+    $('expeditionChance').textContent=chance+'%';$('expeditionCost').textContent='⚡ '+cost;$('expeditionMultiplier').textContent='×'+approachDef.multiplier.toLocaleString('ru-RU',{maximumFractionDigits:2});
+    $('expeditionRewardHint').textContent=key==='orbit'?`При успехе: примерно ${Math.round(14*approachDef.multiplier)}–${Math.round(25*approachDef.multiplier)} 💎 и ${Math.max(1,Math.round(1*approachDef.multiplier))}–${Math.max(2,Math.round(3*approachDef.multiplier))} 🔩.`:key==='canyon'?`При успехе: примерно ${Math.round(26*approachDef.multiplier)}–${Math.round(44*approachDef.multiplier)} 💎 и ${Math.max(1,Math.round(2*approachDef.multiplier))}–${Math.max(3,Math.round(5*approachDef.multiplier))} 🔩.`:`При успехе: примерно ${Math.round(6*approachDef.multiplier)}–${Math.round(12*approachDef.multiplier)} 🧪, кристаллы и сплав.`;
+    $('launchExpeditionBtn').disabled=!available||state.energy<cost;
+    $('expeditionLaunchHint').textContent=!available?d.unlockText:state.energy<cost?`Не хватает энергии: требуется ${cost}, доступно ${Math.floor(state.energy)}. Дождись восстановления.`:`Риск провала: ${100-chance}%. Энергия тратится при запуске независимо от результата.`;
+    $('expRuns').textContent=fmt(state.expeditionRuns);$('expWins').textContent=fmt(state.expeditionWins);$('expWinRate').textContent=state.expeditionRuns?Math.round(state.expeditionWins/state.expeditionRuns*100)+'%':'—';$('expRelics').textContent=fmt(state.expeditionRelics);
+    const hist=$('expeditionHistory');
+    if(!state.expeditionHistory.length){hist.innerHTML='<div class="expedition-empty">Экспедиции ещё не проводились. Выбери направление и отправь первый отряд.</div>';}
+    else hist.innerHTML=state.expeditionHistory.slice(0,5).map(item=>`<div class="expedition-history-item"><div class="expedition-history-icon">${item.icon||'🛰️'}</div><div class="expedition-history-main"><div class="expedition-history-name">${item.success?'✅':'⚠️'} ${item.name} · ${item.approach}</div><div class="expedition-history-desc">${item.message}</div><div class="expedition-history-reward">${item.reward|| (item.success?'Награда получена':'Энергия потрачена')}</div></div></div>`).join('');
+  }
+  function runExpedition(){
+    const key=state.expeditionLocation,d=expeditionDefs[key],approach=approachDefs[state.expeditionApproach]||approachDefs.standard;
+    if(!d||!d.unlock()){toast('🔒 <strong>Направление закрыто.</strong> Выполни условия открытия.');render();return;}
+    const cost=expeditionCost(key);if(state.energy<cost){toast('⚡ <strong>Недостаточно энергии.</strong> Дождись восстановления.');render();return;}
+    state.energy-=cost;state.expeditionRuns++;state.explores++;state.weeklyExplores++;
+    const success=Math.random()<expeditionSuccessChance(key,state.expeditionApproach);
+    let message='',reward=[],icon=d.icon;
+    if(success){
+      state.expeditionWins++;
+      const amount=(min,max)=>min+Math.floor(Math.random()*(max-min+1));
+      const scale=n=>Math.max(1,Math.round(n*approach.multiplier));
+      if(key==='orbit'){
+        const c=scale(amount(14,25)+state.scanner*2+state.techSurvey*2);const a=scale(amount(1,3));state.crystals+=c;state.alloy+=a;reward.push(`+${c} 💎`,`+${a} 🔩`);
+      } else if(key==='canyon'){
+        const c=scale(amount(26,44)+state.scanner*3+state.techSurvey*2);const a=scale(amount(2,5));state.crystals+=c;state.alloy+=a;reward.push(`+${c} 💎`,`+${a} 🔩`);
+      } else {
+        const p=scale(amount(6,12)+state.scanner+state.techSurvey);const c=scale(amount(8,20)+state.techSurvey*2);const a=scale(amount(1,4));state.plasma+=p;state.crystals+=c;state.alloy+=a;reward.push(`+${p} 🧪`,`+${c} 💎`,`+${a} 🔩`);
+      }
+      // A successful field event grants one extra effect, beyond the location's base haul.
+      if(Math.random()<0.34){
+        const event= Math.random();
+        if(event<0.34){const c=scale(amount(8,16));state.crystals+=c;message=`В заброшенном тайнике обнаружены дополнительные кристаллы (+${c}).`;reward.push(`тайник +${c} 💎`);}
+        else if(event<0.67){const a=scale(amount(1,3));state.alloy+=a;message=`Дрон нашёл склад пригодных деталей (+${a} сплава).`;reward.push(`запчасти +${a} 🔩`);}
+        else{const e=amount(5,12);state.energy=clamp(state.energy+e,0,100);message=`Обнаружено энергетическое поле: восстановлено ${e} энергии.`;reward.push(`+${e} ⚡`);}
+      }
+      const relicChance=clamp(0.045+state.techSurvey*0.025+(key==='echo'?0.035:0)+(state.expeditionApproach==='risky'?0.055:0),0,0.35);
+      if(Math.random()<relicChance){state.relics++;state.relicsFound++;state.expeditionRelics++;message+=(message?' ':'')+'Найден редкий артефакт.';reward.push('+1 🗝️');toast('🗝️ <strong>Артефакт обнаружен!</strong> Найдено редкое свидетельство древней цивилизации.');}
+      if(!message)message='Экспедиция завершена без происшествий. Отряд вернулся с ресурсами.';
+      gainXP(key==='echo'?25:18);icon='✅';
+    } else {
+      state.expeditionLosses++;gainXP(5);
+      const incident=Math.random();
+      if(incident<0.34){message='Пылевая буря заставила отряд вернуться раньше. Основной груз не найден.';}
+      else if(incident<0.68){message='Навигационный маяк вышел из строя. Дрон вернулся без груза, но собрал телеметрию.';}
+      else{state.alloy+=1;message='План не выполнен, однако экипаж забрал один пригодный фрагмент сплава.';reward.push('+1 🔩');}
+      reward.unshift('XP +5');icon='⚠️';
+    }
+    const historyItem={success,name:d.name,icon,approach:approach.name,message,reward:reward.join(' · '),time:new Date().toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'})};
+    state.expeditionHistory.unshift(historyItem);state.expeditionHistory=state.expeditionHistory.slice(0,5);
+    log(success?'🛰️':'⚠️',`${d.name}: ${success?'успех':'неудача'} — ${message}`);
+    if(success){toast(`🚀 <strong>Экспедиция успешна!</strong> ${reward.slice(0,3).join(' · ')}`);}else{toast('⚠️ <strong>Экспедиция не удалась.</strong> Энергия потрачена, опыт сохранён.');}
+    render();save();
+  }
+
   function render(){
     ensureWeeklyCycle();
     $('crystals').textContent=fmt(state.crystals);$('energy').textContent=fmt(state.energy);$('alloy').textContent=fmt(state.alloy);$('plasma').textContent=fmt(state.plasma);$('relics').textContent=fmt(state.relics);$('relicsFoundLabel').textContent=`Найдено за всё время: ${fmt(state.relicsFound)}`;$('level').textContent=state.level;$('xpLabel').textContent=`Исследователь · ${fmt(state.xp)} XP`;
@@ -337,7 +455,7 @@
     $('generatorLevel').textContent=`Уровень ${state.generator} / 3 · ${state.generator?'активен':'не построен'}`; $('generatorCost').textContent=state.generator>=3?'МАКСИМУМ':`💎 ${fmt(35*(state.generator+1))} · 🔩 ${fmt(4*(state.generator+1))}`; $('generatorBtn').textContent=state.generator>=3?'МАКСИМУМ':state.generator?'УЛУЧШИТЬ':'ПОСТРОИТЬ'; $('generatorBtn').disabled=state.generator>=3||state.crystals<35*(state.generator+1)||state.alloy<4*(state.generator+1);
     $('scannerLevel').textContent=`Уровень ${state.scanner} / 3 · ${state.scanner?'активен':'не построен'}`; $('scannerCost').textContent=state.scanner>=3?'МАКСИМУМ':`💎 ${fmt(30*(state.scanner+1))} · 🔩 ${fmt(3*(state.scanner+1))}`; $('scannerBtn').textContent=state.scanner>=3?'МАКСИМУМ':state.scanner?'УЛУЧШИТЬ':'ПОСТРОИТЬ'; $('scannerBtn').disabled=state.scanner>=3||state.crystals<30*(state.scanner+1)||state.alloy<3*(state.scanner+1);
     $('exploreEnergyCost').textContent=`⚡ ${exploreEnergy} энергии`;$('exploreDescription').textContent=inEcho?'Исследуй плазменные разломы: можно найти плазму, кристаллы, сплав и редкие артефакты.':'Можно найти кристаллы, сплав или редкий артефакт.';
-    renderAchievements(); renderSectors(); renderResearch(); renderWeekly(); renderFeed();
+    renderAchievements(); renderSectors(); renderResearch(); renderWeekly(); renderExpeditions(); renderFeed();
   }
   function gainXP(amount){state.xp+=amount;const nextLevel=1+Math.floor(state.xp/100);if(nextLevel>state.level){state.level=nextLevel;toast('🚀 <strong>Новый уровень!</strong> Аванпост достиг уровня '+state.level+'.');log('⬆️',`Аванпост повысил уровень до ${state.level}.`);}}
   $('mineBtn').addEventListener('click',()=>{
@@ -397,6 +515,14 @@
   $('techSurveyBtn').addEventListener('click',()=>buyResearch('survey'));
   $('techEfficiencyBtn').addEventListener('click',()=>buyResearch('efficiency'));
   $('exchangeRelicBtn').addEventListener('click',()=>{if(state.relics<1)return;state.relics--;state.crystals+=25;state.alloy+=3;gainXP(5);log('🗝️','Изучен один артефакт: архив получил новые данные. Награда: +25 кристаллов и +3 сплава.');toast('🗝️ <strong>Артефакт обработан.</strong> +25 💎 и +3 🔩.');render();save();});
+  $('expSelectOrbit').addEventListener('click',()=>{state.expeditionLocation='orbit';render();save();});
+  $('expSelectCanyon').addEventListener('click',()=>{if(!expeditionDefs.canyon.unlock())return;state.expeditionLocation='canyon';render();save();});
+  $('expSelectEcho').addEventListener('click',()=>{if(!expeditionDefs.echo.unlock())return;state.expeditionLocation='echo';render();save();});
+  $('approachCautious').addEventListener('click',()=>{state.expeditionApproach='cautious';render();save();});
+  $('approachStandard').addEventListener('click',()=>{state.expeditionApproach='standard';render();save();});
+  $('approachRisky').addEventListener('click',()=>{state.expeditionApproach='risky';render();save();});
+  $('launchExpeditionBtn').addEventListener('click',runExpedition);
+
   $('weeklyClaimBtn').addEventListener('click',()=>{ensureWeeklyCycle();if(state.weeklyMines<20||state.weeklyExplores<5||state.weeklyClaimed)return;state.weeklyClaimed=true;state.crystals+=50;state.alloy+=6;gainXP(30);log('📋','Еженедельный контракт выполнен: +50 кристаллов, +6 сплава и +30 XP.');toast('📋 <strong>Контракт закрыт!</strong> +50 💎, +6 🔩 и +30 XP.');render();save();});
 
   $('claimBtn').addEventListener('click',()=>{if(state.crystalMines<10||state.questClaimed)return;state.questClaimed=true;state.crystals+=20;state.alloy+=3;gainXP(15);log('🎁','Задание выполнено: получено 20 кристаллов и 3 сплава.');toast('🎁 <strong>Награда получена!</strong> +20 кристаллов и +3 сплава.');render();save();});
@@ -406,7 +532,7 @@
   $('introPolkadotClaim').addEventListener('click',()=>{if(!state.guideOpened||state.introPolkadotClaimed)return;state.introPolkadotClaimed=true;gainXP(30);log('🌌','Учебный этап отмечен: ознакомление с материалами Polkadot.');toast('🌌 <strong>Маршрут исследователя продвинут.</strong> +30 внутриигровых XP.');render();save();});
   $('dailySignalBtn').addEventListener('click',()=>{const today=localDayKey();if(state.dailySignalDate===today)return;state.dailySignalDate=today;state.crystals+=5;log('📡','Получен ежедневный игровой сигнал: +5 кристаллов.');toast('📡 <strong>Сигнал принят.</strong> +5 игровых кристаллов.');render();save();});
   $('resetBtn').addEventListener('click',()=>{if(!confirm('Сбросить весь локальный прогресс Polka Frontier?'))return;localStorage.removeItem(SAVE_KEY);LEGACY_SAVE_KEYS.forEach(k=>localStorage.removeItem(k));location.reload();});
-  document.querySelectorAll('[data-nav]').forEach(btn=>btn.addEventListener('click',()=>{document.querySelectorAll('[data-nav]').forEach(b=>b.classList.remove('active'));btn.classList.add('active');const nav=btn.dataset.nav;const target=nav==='missions'?'missionPanel':nav==='weekly'?'weeklyPanel':nav==='fleet'?'basePanel':nav==='research'?'researchLabPanel':nav==='polkadot'?'polkadotGuidePanel':nav==='expansion'?'expansionPanel':nav==='sectors'?'sectorPanel':'basePanel';$(target).scrollIntoView({behavior:'smooth',block:'start'});if(nav==='research')toast('🧬 <strong>Научный отсек</strong> — улучшай технологии за игровые ресурсы.');if(nav==='polkadot')toast('🌌 <strong>Маршрут Polkadot</strong> — официальные материалы ниже.');if(nav==='weekly')toast('📋 <strong>Еженедельный контракт</strong> — выполни обе задачи и забери награду.');if(nav==='fleet')toast('⛏ <strong>Добыча</strong> — добывай ресурсы и улучшай оборудование.');if(nav==='expansion')toast('🏗️ <strong>Развитие базы</strong> — улучшай энергосеть, сканер и открывай достижения.');if(nav==='sectors')toast('🪐 <strong>Карта секторов</strong> — открой Эхо-9, когда база достигнет уровня 3.');}));
+  document.querySelectorAll('[data-nav]').forEach(btn=>btn.addEventListener('click',()=>{document.querySelectorAll('[data-nav]').forEach(b=>b.classList.remove('active'));btn.classList.add('active');const nav=btn.dataset.nav;const target=nav==='missions'?'missionPanel':nav==='expeditions'?'expeditionPanel':nav==='weekly'?'weeklyPanel':nav==='fleet'?'basePanel':nav==='research'?'researchLabPanel':nav==='polkadot'?'polkadotGuidePanel':nav==='expansion'?'expansionPanel':nav==='sectors'?'sectorPanel':'basePanel';$(target).scrollIntoView({behavior:'smooth',block:'start'});if(nav==='research')toast('🧬 <strong>Научный отсек</strong> — улучшай технологии за игровые ресурсы.');if(nav==='polkadot')toast('🌌 <strong>Маршрут Polkadot</strong> — официальные материалы ниже.');if(nav==='expeditions')toast('🛰️ <strong>Экспедиционный корпус</strong> — выбирай место и тактику миссии.');if(nav==='weekly')toast('📋 <strong>Еженедельный контракт</strong> — выполни обе задачи и забери награду.');if(nav==='fleet')toast('⛏ <strong>Добыча</strong> — добывай ресурсы и улучшай оборудование.');if(nav==='expansion')toast('🏗️ <strong>Развитие базы</strong> — улучшай энергосеть, сканер и открывай достижения.');if(nav==='sectors')toast('🪐 <strong>Карта секторов</strong> — открой Эхо-9, когда база достигнет уровня 3.');}));
   const CHAIN_ID='0x'+(420420417).toString(16);
   const chainParams={chainId:CHAIN_ID,chainName:'Polkadot Hub TestNet',nativeCurrency:{name:'Paseo',symbol:'PAS',decimals:18},rpcUrls:['https://services.polkadothub-rpc.com/testnet/'],blockExplorerUrls:['https://blockscout-testnet.polkadot.io/']};
   async function connectWallet(){
