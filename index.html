@@ -457,6 +457,9 @@
   const LEGACY_SAVE_KEYS = ['polka-frontier-save-v7','polka-frontier-save-v6','polka-frontier-save-v5','polka-frontier-save-v4','polka-frontier-save-v3','polka-frontier-save-v2','polka-frontier-save-v1'];
   const state = { crystals:45, energy:100, alloy:8, plasma:0, relics:0, relicsFound:0, level:1, xp:0, drill:1, drone:0, mines:0, crystalMines:0, explores:0, generator:0, scanner:0, techGeology:0, techSurvey:0, techEfficiency:0, sector08Unlocked:false, activeSector:'07', sector08Mines:0, plasmaCore:0, achievements:{}, questClaimed:false, introMineClaimed:false, introDrillClaimed:false, introPolkadotClaimed:false, guideOpened:false, dailySignalDate:'', weeklyChallengeKey:'', weeklyMines:0, weeklyExplores:0, weeklyClaimed:false, expeditionLocation:'orbit', expeditionApproach:'standard', expeditionRuns:0, expeditionWins:0, expeditionLosses:0, expeditionRelics:0, expeditionHistory:[], profileName:'Исследователь', profileTag:'', lastTick:Date.now(), feed:[] };
   let walletAddress = null;
+  let walletProvider = null;
+  let walletChainId = null;
+  const watchedWalletProviders = new WeakSet();
   const $ = id => document.getElementById(id);
   const fmt = n => Math.floor(n).toLocaleString(({en:'en-US',ru:'ru-RU',kk:'kk-KZ',es:'es-ES'})[window.PolkaI18n?.language||'ru']||'ru-RU');
   const clamp = (n,min,max) => Math.max(min,Math.min(max,n));
@@ -877,15 +880,130 @@
   $('resetBtn').addEventListener('click',()=>{if(!confirm('Сбросить весь локальный прогресс Polka Frontier?'))return;localStorage.removeItem(SAVE_KEY);LEGACY_SAVE_KEYS.forEach(k=>localStorage.removeItem(k));location.reload();});
   document.querySelectorAll('[data-nav]').forEach(btn=>btn.addEventListener('click',()=>{document.querySelectorAll('[data-nav]').forEach(b=>b.classList.remove('active'));btn.classList.add('active');const nav=btn.dataset.nav;const target=nav==='missions'?'missionPanel':nav==='expeditions'?'expeditionPanel':nav==='profile'?'profilePanel':nav==='weekly'?'weeklyPanel':nav==='fleet'?'basePanel':nav==='research'?'researchLabPanel':nav==='polkadot'?'polkadotGuidePanel':nav==='community'?'communityPanel':nav==='expansion'?'expansionPanel':nav==='sectors'?'sectorPanel':'basePanel';$(target).scrollIntoView({behavior:'smooth',block:'start'});if(nav==='research')toast('🧬 <strong>Научный отсек</strong> — улучшай технологии за игровые ресурсы.');if(nav==='polkadot')toast('🌌 <strong>Маршрут Polkadot</strong> — официальные материалы ниже.');if(nav==='expeditions')toast('🛰️ <strong>Экспедиционный корпус</strong> — выбирай место и тактику миссии.');if(nav==='profile')toast('◎ <strong>Профиль пилота</strong> — настрой имя, поделись результатом или экспортируй сохранение.');if(nav==='weekly')toast('📋 <strong>Еженедельный контракт</strong> — выполни обе задачи и забери награду.');if(nav==='fleet')toast('⛏ <strong>Добыча</strong> — добывай ресурсы и улучшай оборудование.');if(nav==='expansion')toast('🏗️ <strong>Развитие базы</strong> — улучшай энергосеть, сканер и открывай достижения.');if(nav==='sectors')toast('🪐 <strong>Карта секторов</strong> — открой Эхо-9, когда база достигнет уровня 3.');if(nav==='community')toast('✦ <strong>Штаб сообщества</strong> — приглашай тестировщиков и собирай отзывы вручную.');}));
   const CHAIN_ID='0x'+(420420417).toString(16);
-  const chainParams={chainId:CHAIN_ID,chainName:'Polkadot Hub TestNet',nativeCurrency:{name:'Paseo',symbol:'PAS',decimals:18},rpcUrls:['https://services.polkadothub-rpc.com/testnet/'],blockExplorerUrls:['https://blockscout-testnet.polkadot.io/']};
-  async function connectWallet(){
-    if(!window.ethereum){toast('👛 <strong>Кошелёк не найден.</strong> Установи совместимый EVM-кошелёк, например MetaMask.');window.open('https://metamask.io/download/','_blank','noopener');return;}
-    try{const accounts=await window.ethereum.request({method:'eth_requestAccounts'});if(!accounts||!accounts.length)return;try{await window.ethereum.request({method:'wallet_switchEthereumChain',params:[{chainId:CHAIN_ID}]});}catch(err){if(err.code===4902){await window.ethereum.request({method:'wallet_addEthereumChain',params:[chainParams]});}else if(err.code!==4001){throw err;}}
-      walletAddress=accounts[0];$('walletBtn').textContent=walletAddress.slice(0,6)+'…'+walletAddress.slice(-4);$('walletBtn').classList.add('connected');toast('✅ <strong>Кошелёк подключён.</strong> Это тестовая сеть; игра пока не отправляет транзакции.');
-    }catch(err){console.error(err);toast('Не удалось подключить кошелёк. Проверь разрешения и выбранную сеть.');}
+  const CHAIN_ID_LOWER=CHAIN_ID.toLowerCase();
+  const chainParams={chainId:CHAIN_ID,chainName:'Polkadot Hub TestNet',nativeCurrency:{name:'Paseo',symbol:'PAS',decimals:18},rpcUrls:['https://services.polkadothub-rpc.com/testnet'],blockExplorerUrls:['https://blockscout-testnet.polkadot.io/']};
+  const walletCopy=(ru,en,kk,es)=>({ru,en,kk,es}[window.PolkaI18n?.language||'ru']||ru);
+  function getInjectedEvmProvider(){
+    const root=window.ethereum;
+    const providers=Array.isArray(root?.providers)?root.providers:(root?[root]:[]);
+    const candidates=providers.filter(provider=>provider&&typeof provider.request==='function');
+    return candidates.find(provider=>provider.isTalisman)
+      || candidates.find(provider=>provider.isSubWallet)
+      || candidates.find(provider=>provider.isMetaMask)
+      || candidates[0]
+      || null;
   }
-  $('walletBtn').addEventListener('click',connectWallet);
-  if(window.ethereum){window.ethereum.on?.('accountsChanged',accounts=>{if(accounts&&accounts.length){walletAddress=accounts[0];$('walletBtn').textContent=walletAddress.slice(0,6)+'…'+walletAddress.slice(-4);$('walletBtn').classList.add('connected');}else{walletAddress=null;$('walletBtn').textContent='Подключить кошелёк ↗';$('walletBtn').classList.remove('connected');}});}
+  function shortWalletAddress(address){return address?address.slice(0,6)+'…'+address.slice(-4):'';}
+  function renderWalletButton(){
+    const button=$('walletBtn');
+    if(!walletAddress){
+      button.textContent=window.PolkaI18n?.translate('Подключить кошелёк ↗')||'Подключить кошелёк ↗';
+      button.classList.remove('connected');
+      button.title=walletCopy(
+        'Необязательно. Подключение не создаёт токены и не отправляет игровые транзакции.',
+        'Optional. Connecting does not create tokens or send game transactions.',
+        'Міндетті емес. Қосу токен жасамайды және ойын транзакцияларын жібермейді.',
+        'Opcional. Conectar no crea tokens ni envía transacciones del juego.'
+      );
+      return;
+    }
+    const isTestnet=String(walletChainId||'').toLowerCase()===CHAIN_ID_LOWER;
+    button.textContent=shortWalletAddress(walletAddress)+(isTestnet?'':' !');
+    button.classList.toggle('connected',isTestnet);
+    button.title=isTestnet
+      ? walletCopy('Кошелёк подключён к тестовой сети. Нажми, чтобы отключить его от интерфейса игры. Контракт токена ещё не развёрнут.','Wallet connected to the testnet. Click to disconnect it from the game interface. The token contract is not deployed yet.','Әмиян тест желісіне қосылды. Ойын интерфейсінен ажырату үшін бас. Токен контракты әлі орналастырылмаған.','Billetera conectada a la red de prueba. Haz clic para desconectarla de la interfaz del juego. El contrato del token aún no está desplegado.')
+      : walletCopy('Кошелёк подключён, но выбрана другая сеть. Нажми для переключения на Polkadot Hub TestNet.','Wallet connected, but the wrong network is selected. Click to switch to Polkadot Hub TestNet.','Әмиян қосылды, бірақ басқа желі таңдалған. Polkadot Hub TestNet желісіне ауысу үшін бас.','Billetera conectada, pero la red seleccionada no es correcta. Haz clic para cambiar a Polkadot Hub TestNet.');
+  }
+  function watchWalletProvider(provider){
+    if(watchedWalletProviders.has(provider))return;
+    watchedWalletProviders.add(provider);
+    provider.on?.('accountsChanged',accounts=>{
+      if(walletProvider!==provider)return;
+      walletAddress=accounts&&accounts.length?accounts[0]:null;
+      if(!walletAddress)walletChainId=null;
+      renderWalletButton();
+    });
+    provider.on?.('chainChanged',chainId=>{
+      if(walletProvider!==provider)return;
+      walletChainId=String(chainId||'').toLowerCase();
+      renderWalletButton();
+      if(walletAddress&&walletChainId!==CHAIN_ID_LOWER){
+        toast(walletCopy('⚠️ <strong>Выбрана другая сеть.</strong> Нажми кнопку кошелька, чтобы переключиться на тестовую сеть.','⚠️ <strong>Wrong network.</strong> Click the wallet button to switch to the testnet.','⚠️ <strong>Басқа желі таңдалды.</strong> Тест желісіне ауысу үшін әмиян түймесін бас.','⚠️ <strong>Red incorrecta.</strong> Haz clic en la billetera para cambiar a la red de prueba.'));
+      }
+    });
+  }
+  async function ensurePolkadotTestnet(provider){
+    let chainId=String(await provider.request({method:'eth_chainId'})).toLowerCase();
+    if(chainId!==CHAIN_ID_LOWER){
+      try{
+        await provider.request({method:'wallet_switchEthereumChain',params:[{chainId:CHAIN_ID}]});
+      }catch(err){
+        if(Number(err?.code)!==4902)throw err;
+        await provider.request({method:'wallet_addEthereumChain',params:[chainParams]});
+        chainId=String(await provider.request({method:'eth_chainId'})).toLowerCase();
+        if(chainId!==CHAIN_ID_LOWER){
+          await provider.request({method:'wallet_switchEthereumChain',params:[{chainId:CHAIN_ID}]});
+        }
+      }
+    }
+    return String(await provider.request({method:'eth_chainId'})).toLowerCase();
+  }
+  async function connectWallet(){
+    const provider=getInjectedEvmProvider();
+    if(!provider){
+      toast(walletCopy(
+        '👛 <strong>Совместимый кошелёк не найден.</strong> Установи <a href="https://www.talisman.xyz/download" target="_blank" rel="noopener noreferrer">Talisman</a> или <a href="https://www.subwallet.app/download" target="_blank" rel="noopener noreferrer">SubWallet</a>, затем обнови страницу.',
+        '👛 <strong>No compatible wallet found.</strong> Install <a href="https://www.talisman.xyz/download" target="_blank" rel="noopener noreferrer">Talisman</a> or <a href="https://www.subwallet.app/download" target="_blank" rel="noopener noreferrer">SubWallet</a>, then refresh the page.',
+        '👛 <strong>Үйлесімді әмиян табылмады.</strong> <a href="https://www.talisman.xyz/download" target="_blank" rel="noopener noreferrer">Talisman</a> немесе <a href="https://www.subwallet.app/download" target="_blank" rel="noopener noreferrer">SubWallet</a> орнатып, бетті жаңарт.',
+        '👛 <strong>No se encontró una billetera compatible.</strong> Instala <a href="https://www.talisman.xyz/download" target="_blank" rel="noopener noreferrer">Talisman</a> o <a href="https://www.subwallet.app/download" target="_blank" rel="noopener noreferrer">SubWallet</a> y actualiza la página.'
+      ));
+      return;
+    }
+    try{
+      const accounts=await provider.request({method:'eth_requestAccounts'});
+      if(!accounts||!accounts.length)return;
+      walletProvider=provider;
+      walletAddress=accounts[0];
+      watchWalletProvider(provider);
+      try{walletChainId=String(await provider.request({method:'eth_chainId'})).toLowerCase();}catch(e){walletChainId='';}
+      renderWalletButton();
+      try{
+        walletChainId=await ensurePolkadotTestnet(provider);
+        renderWalletButton();
+        if(walletChainId===CHAIN_ID_LOWER){
+          toast(walletCopy('✅ <strong>Кошелёк подключён к Polkadot Hub TestNet.</strong> Токен ещё не выпущен; игра не отправляет транзакции.','✅ <strong>Wallet connected to Polkadot Hub TestNet.</strong> No token has been issued and the game does not send transactions.','✅ <strong>Әмиян Polkadot Hub TestNet желісіне қосылды.</strong> Токен әлі шығарылмаған, ойын транзакция жібермейді.','✅ <strong>Billetera conectada a Polkadot Hub TestNet.</strong> El token aún no se ha emitido y el juego no envía transacciones.'));
+        }else{
+          toast(walletCopy('Кошелёк подключён, но тестовая сеть не выбрана. Попробуй нажать ещё раз и подтверди смену сети.','Wallet connected, but the testnet is not selected. Click again and approve the network switch.','Әмиян қосылды, бірақ тест желісі таңдалмады. Қайта басып, желіні ауыстыруды раста.','Billetera conectada, pero la red de prueba no está seleccionada. Haz clic de nuevo y aprueba el cambio de red.'));
+        }
+      }catch(networkError){
+        try{walletChainId=String(await provider.request({method:'eth_chainId'})).toLowerCase();}catch(e){}
+        renderWalletButton();
+        if(Number(networkError?.code)===4001){
+          toast(walletCopy('Подключение кошелька разрешено, но смена сети отклонена. Средства не затронуты.','Wallet access was approved, but the network switch was rejected. No funds were touched.','Әмиянға кіруге рұқсат берілді, бірақ желіні ауыстырудан бас тартылды. Қаражатқа әсер етілмеді.','Se aprobó el acceso a la billetera, pero se rechazó el cambio de red. No se tocaron fondos.'));
+        }else{
+          toast(walletCopy('Не удалось переключить сеть. Проверь параметры Polkadot Hub TestNet в кошельке и попробуй снова.','Could not switch networks. Check the Polkadot Hub TestNet settings in your wallet and try again.','Желіні ауыстыру мүмкін болмады. Әмияндағы Polkadot Hub TestNet параметрлерін тексеріп, қайта көр.','No se pudo cambiar la red. Comprueba la configuración de Polkadot Hub TestNet en tu billetera e inténtalo de nuevo.'));
+        }
+      }
+    }catch(err){
+      console.error(err);
+      if(Number(err?.code)===4001){
+        toast(walletCopy('Подключение отменено в кошельке.','Connection was cancelled in the wallet.','Әмияндағы қосылым тоқтатылды.','Se canceló la conexión en la billetera.'));
+      }else{
+        toast(walletCopy('Не удалось подключить кошелёк. Проверь разрешения расширения и попробуй снова.','Could not connect the wallet. Check the extension permissions and try again.','Әмиянды қосу мүмкін болмады. Кеңейтім рұқсаттарын тексеріп, қайта көр.','No se pudo conectar la billetera. Comprueba los permisos de la extensión e inténtalo de nuevo.'));
+      }
+    }
+  }
+  $('walletBtn').addEventListener('click',()=>{
+    if(walletAddress&&String(walletChainId||'').toLowerCase()===CHAIN_ID_LOWER){
+      walletAddress=null;
+      walletChainId=null;
+      walletProvider=null;
+      renderWalletButton();
+      toast(walletCopy('Кошелёк отключён от интерфейса игры. Чтобы полностью отозвать доступ сайта, открой настройки подключённых приложений в кошельке.','Wallet disconnected from the game interface. To revoke site access completely, open connected-app settings in your wallet.','Әмиян ойын интерфейсінен ажыратылды. Сайт рұқсатын толық қайтару үшін әмияндағы қосылған қолданбалар баптауларын аш.','Billetera desconectada de la interfaz del juego. Para revocar completamente el acceso del sitio, abre la configuración de aplicaciones conectadas en tu billetera.'));
+      return;
+    }
+    connectWallet();
+  });
   load();
   let last=Date.now();setInterval(()=>{const now=Date.now();const elapsed=now-last;last=now;const regenMultiplier=1+state.generator*0.5;const delta=Math.min(5,elapsed/3000*regenMultiplier);if(state.energy<100)state.energy=clamp(state.energy+delta,0,100);
     if(state.drone){state._droneProgress=(state._droneProgress||0)+elapsed;if(state._droneProgress>=5000){const cycles=Math.floor(state._droneProgress/5000);state._droneProgress%=5000;state.crystals+=cycles*2*state.drone;state.alloy+=Math.floor(cycles/3)*state.drone;}}
