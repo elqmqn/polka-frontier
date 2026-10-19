@@ -892,23 +892,37 @@
       }
     });
   }
-  async function getInjectedEvmProvider(){
+  async function getInjectedEvmProviders(){
     // EIP-6963 discovers multiple injected wallets instead of relying on window.ethereum alone.
     try{window.dispatchEvent(new Event('eip6963:requestProvider'));}catch(e){}
-    await new Promise(resolve=>setTimeout(resolve,250));
+    await new Promise(resolve=>setTimeout(resolve,350));
     const root=window.ethereum;
     const legacy=Array.isArray(root?.providers)?root.providers:(root?[root]:[]);
     const candidates=[
-      ...discoveredWalletProviders.map(item=>({provider:item.provider,name:String(item.info?.name||''),rdns:String(item.info?.rdns||'')})),
-      ...legacy.filter(provider=>provider&&typeof provider.request==='function').map(provider=>({provider,name:String(provider.name||''),rdns:String(provider.rdns||'')}))
+      ...discoveredWalletProviders.map(item=>({provider:item.provider,name:String(item.info?.name||'Injected wallet'),rdns:String(item.info?.rdns||''),uuid:String(item.info?.uuid||'')})),
+      ...legacy.filter(provider=>provider&&typeof provider.request==='function').map(provider=>({provider,name:String(provider.name|| (provider.isMetaMask?'MetaMask':provider.isTalisman?'Talisman':provider.isSubWallet?'SubWallet':'Browser wallet')),rdns:String(provider.rdns||''),uuid:''}))
     ];
     const unique=[];
     for(const item of candidates)if(!unique.some(existing=>existing.provider===item.provider))unique.push(item);
-    const preferred=unique.find(item=>item.provider.isTalisman||/talisman/i.test(item.name+' '+item.rdns))
-      ||unique.find(item=>item.provider.isSubWallet||/subwallet/i.test(item.name+' '+item.rdns))
-      ||unique.find(item=>item.provider.isMetaMask||/metamask/i.test(item.name+' '+item.rdns))
-      ||unique[0];
-    return preferred?.provider||null;
+    unique.sort((a,b)=>{
+      const rank=item=>item.provider.isTalisman||/talisman/i.test(item.name+' '+item.rdns)?0:item.provider.isSubWallet||/subwallet/i.test(item.name+' '+item.rdns)?1:item.provider.isMetaMask||/metamask/i.test(item.name+' '+item.rdns)?2:3;
+      return rank(a)-rank(b)||a.name.localeCompare(b.name);
+    });
+    return unique;
+  }
+  async function chooseWalletProvider(){
+    const wallets=await getInjectedEvmProviders();
+    if(!wallets.length)return null;
+    if(wallets.length===1)return wallets[0].provider;
+    const options=wallets.map((item,index)=>String(index+1)+'. '+item.name).join('\\n');
+    const answer=window.prompt('Choose a wallet to connect:\\n\\n'+options+'\\n\\nEnter the number of your preferred wallet:','1');
+    if(answer===null)return null;
+    const index=Number.parseInt(answer,10)-1;
+    if(!Number.isInteger(index)||index<0||index>=wallets.length){
+      toast('Invalid choice. Click Connect Wallet and choose a listed wallet number.');
+      return null;
+    }
+    return wallets[index].provider;
   }
   function shortWalletAddress(address){return address?address.slice(0,6)+'…'+address.slice(-4):'';}
   function renderWalletButton(){
@@ -966,7 +980,7 @@
     return String(await provider.request({method:'eth_chainId'})).toLowerCase();
   }
   async function connectWallet(){
-    const provider=await getInjectedEvmProvider();
+    const provider=await chooseWalletProvider();
     if(!provider){
       toast(walletCopy(
         '👛 <strong>Совместимый кошелёк не найден.</strong> Установи <a href="https://www.talisman.xyz/download" target="_blank" rel="noopener noreferrer">Talisman</a> или <a href="https://www.subwallet.app/download" target="_blank" rel="noopener noreferrer">SubWallet</a>, затем обнови страницу.',
