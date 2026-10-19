@@ -883,15 +883,32 @@
   const CHAIN_ID_LOWER=CHAIN_ID.toLowerCase();
   const chainParams={chainId:CHAIN_ID,chainName:'Polkadot Hub TestNet',nativeCurrency:{name:'PAS',symbol:'PAS',decimals:18},rpcUrls:['https://services.polkadothub-rpc.com/testnet'],blockExplorerUrls:['https://blockscout-testnet.polkadot.io/']};
   const walletCopy=(ru,en,kk,es)=>({ru,en,kk,es}[window.PolkaI18n?.language||'ru']||ru);
-  function getInjectedEvmProvider(){
+  const discoveredWalletProviders=[];
+  if(typeof window!=='undefined'&&typeof window.addEventListener==='function'){
+    window.addEventListener('eip6963:announceProvider',event=>{
+      const detail=event?.detail;
+      if(detail?.provider&&typeof detail.provider.request==='function'&&!discoveredWalletProviders.some(item=>item.info?.uuid===detail.info?.uuid)){
+        discoveredWalletProviders.push({info:detail.info||{},provider:detail.provider});
+      }
+    });
+  }
+  async function getInjectedEvmProvider(){
+    // EIP-6963 discovers multiple injected wallets instead of relying on window.ethereum alone.
+    try{window.dispatchEvent(new Event('eip6963:requestProvider'));}catch(e){}
+    await new Promise(resolve=>setTimeout(resolve,250));
     const root=window.ethereum;
-    const providers=Array.isArray(root?.providers)?root.providers:(root?[root]:[]);
-    const candidates=providers.filter(provider=>provider&&typeof provider.request==='function');
-    return candidates.find(provider=>provider.isTalisman)
-      || candidates.find(provider=>provider.isSubWallet)
-      || candidates.find(provider=>provider.isMetaMask)
-      || candidates[0]
-      || null;
+    const legacy=Array.isArray(root?.providers)?root.providers:(root?[root]:[]);
+    const candidates=[
+      ...discoveredWalletProviders.map(item=>({provider:item.provider,name:String(item.info?.name||''),rdns:String(item.info?.rdns||'')})),
+      ...legacy.filter(provider=>provider&&typeof provider.request==='function').map(provider=>({provider,name:String(provider.name||''),rdns:String(provider.rdns||'')}))
+    ];
+    const unique=[];
+    for(const item of candidates)if(!unique.some(existing=>existing.provider===item.provider))unique.push(item);
+    const preferred=unique.find(item=>item.provider.isTalisman||/talisman/i.test(item.name+' '+item.rdns))
+      ||unique.find(item=>item.provider.isSubWallet||/subwallet/i.test(item.name+' '+item.rdns))
+      ||unique.find(item=>item.provider.isMetaMask||/metamask/i.test(item.name+' '+item.rdns))
+      ||unique[0];
+    return preferred?.provider||null;
   }
   function shortWalletAddress(address){return address?address.slice(0,6)+'…'+address.slice(-4):'';}
   function renderWalletButton(){
@@ -949,7 +966,7 @@
     return String(await provider.request({method:'eth_chainId'})).toLowerCase();
   }
   async function connectWallet(){
-    const provider=getInjectedEvmProvider();
+    const provider=await getInjectedEvmProvider();
     if(!provider){
       toast(walletCopy(
         '👛 <strong>Совместимый кошелёк не найден.</strong> Установи <a href="https://www.talisman.xyz/download" target="_blank" rel="noopener noreferrer">Talisman</a> или <a href="https://www.subwallet.app/download" target="_blank" rel="noopener noreferrer">SubWallet</a>, затем обнови страницу.',
