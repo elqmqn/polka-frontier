@@ -59,6 +59,18 @@
   @media(max-width:650px){.top-right{flex-wrap:wrap;justify-content:flex-start}.language-picker{flex:1;max-width:190px}.network-pill{white-space:normal}.wallet{flex:1}}
 
 </style>
+
+<!-- PostHog analytics: EU region -->
+<script>
+!function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="init capture identify alias people.set people.set_once people.unset people.increment people.append people.remove people.group set_group reset get_distinct_id get_session_id get_session_start_time register register_once unregister opt_out_capturing opt_in_capturing has_opted_out_capturing clear_opt_in_out_capturing get_property".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+posthog.init('phc_ydWo9wWrLce9agXKeqWLSVRUs9QtMt2jErc5gBNA2m4w', {
+  api_host: 'https://eu.i.posthog.com',
+  person_profiles: 'identified_only',
+  capture_pageview: true,
+  capture_pageleave: true
+});
+</script>
+
 </head>
 <body>
 <div class="app">
@@ -1043,5 +1055,72 @@
   save(); // Persist v0.8-compatible data with the v0.9 game build.
 })();
 </script>
+
+<script>
+/* Polka Frontier gameplay analytics. No wallet address or game resources are collected. */
+(function () {
+  if (!window.posthog) return;
+  var sessionStartedAt = Date.now();
+  var activeStartedAt = document.visibilityState === 'visible' ? Date.now() : null;
+  var activeMs = 0;
+  var lastHeartbeatAt = Date.now();
+  var ended = false;
+  var heartbeat = null;
+
+  function capture(name, properties) {
+    try { window.posthog.capture(name, Object.assign({ game_version: '0.9' }, properties || {})); } catch (_) {}
+  }
+  function flushActive() {
+    if (activeStartedAt !== null) {
+      var now = Date.now();
+      activeMs += Math.max(0, now - activeStartedAt);
+      activeStartedAt = now;
+    }
+  }
+  function sendPlaytime() {
+    if (ended || document.visibilityState !== 'visible') return;
+    var now = Date.now();
+    var delta = Math.max(0, now - lastHeartbeatAt);
+    lastHeartbeatAt = now;
+    if (activeStartedAt !== null) {
+      activeMs += delta;
+      activeStartedAt = now;
+    }
+    if (delta > 0) capture('game_playtime', { active_seconds: Math.round(delta / 1000) });
+  }
+  function endSession() {
+    if (ended) return;
+    if (document.visibilityState === 'visible') sendPlaytime();
+    ended = true;
+    if (heartbeat) clearInterval(heartbeat);
+    var totalSeconds = Math.round(activeMs / 1000);
+    capture('game_session_end', {
+      active_seconds: totalSeconds,
+      elapsed_seconds: Math.round((Date.now() - sessionStartedAt) / 1000)
+    });
+  }
+
+  capture('game_session_start', {
+    page_path: location.pathname,
+    language: document.documentElement.lang || 'unknown'
+  });
+  heartbeat = setInterval(sendPlaytime, 30000);
+  document.addEventListener('visibilitychange', function () {
+    if (document.visibilityState === 'hidden') {
+      if (activeStartedAt !== null) {
+        activeMs += Math.max(0, Date.now() - activeStartedAt);
+        activeStartedAt = null;
+      }
+      lastHeartbeatAt = Date.now();
+    } else if (!ended) {
+      activeStartedAt = Date.now();
+      lastHeartbeatAt = Date.now();
+    }
+  });
+  window.addEventListener('pagehide', endSession);
+  window.addEventListener('beforeunload', endSession);
+})();
+</script>
+
 </body>
 </html>
